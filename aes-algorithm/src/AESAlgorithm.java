@@ -1,8 +1,4 @@
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.*;
-import javax.crypto.*;
-import javax.crypto.spec.IvParameterSpec;
+
 
 public class AESAlgorithm {
 
@@ -25,7 +21,8 @@ public class AESAlgorithm {
     /* Runda kończąca:
         wykonywane są te same operacje co w normalnych rundach szyfrujących, z wyjątkiem operacji mnożenia kolumn, która w Rundzie Kończącej jest pomijana.
      */
-    
+
+
 
 }
 
