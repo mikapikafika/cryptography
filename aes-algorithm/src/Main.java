@@ -21,6 +21,25 @@ public class Main {
             switch (num) {
                 case 1 -> {
                     // blyblybly
+                    AESAlgorithm algorithm = new AESAlgorithm();
+                    byte[][] arr = algorithm.zwroc_blok();
+                    for (int i = 0; i < 4; i ++) {
+                        for (int j = 0; j < 4; j ++) {
+                            System.out.print(arr[i][j]);
+                            System.out.print(" ");
+                        }
+                        System.out.println();
+                    }
+                    System.out.println();
+                    arr = algorithm.subBytes(arr);
+                    for (int i = 0; i < 4; i ++) {
+                        for (int j = 0; j < 4; j ++) {
+                            System.out.print(arr[i][j]);
+                            System.out.print(" ");
+                        }
+                        System.out.println();
+                    }
+                    System.out.println();
                 }
                 case 2 -> {
                     // blyblyblyyyy
