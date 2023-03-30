@@ -1,6 +1,10 @@
 import java.util.*;
 
 public class Main {
+
+    /**
+     * Menu :)
+     */
     public static void showMenu() {
         Scanner scanner = new Scanner(System.in);
 
