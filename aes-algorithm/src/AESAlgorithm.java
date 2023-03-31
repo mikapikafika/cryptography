@@ -19,7 +19,9 @@ public class AESAlgorithm {
         for (int row = 0; row < N; row ++) {
             for (int col = 0; col < N; col ++) {
                 int intValue = (blok[row][col] & 0xff);  // robin inta z bajta
-                tmp[row][col] = (byte) SBox.getSBox(row, col);
+                int col_sbox = intValue / N; // 28
+                int row_sbox = intValue % N;  // 2
+                tmp[row][col] = (byte) SBox.getSBox(row_sbox, col_sbox);
             }
         }
         return tmp;
