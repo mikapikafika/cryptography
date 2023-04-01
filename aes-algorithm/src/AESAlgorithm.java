@@ -12,7 +12,7 @@ public class AESAlgorithm {
             blok_podzielony[i / N][i % N] = blok[i];  // to nie jest kolumn order ale tak ma rogowski
         }
         return blok_podzielony;
-    }
+    } // 128 bitow 16 bajtow 4x4
 
     public byte[][] subBytes(byte[][] blok) {  // ogolnie duza niewiadoma dla mnie jest ta numeracja w tych bloakch 4x4
         byte[][] tmp = new byte[N][N];          // na razie na pałe to jakos robie
@@ -26,6 +26,9 @@ public class AESAlgorithm {
         }
         return tmp;
     }
+
+
+
 
     /* Przygotowanie podkluczy:
         generowany jest jeden podklucz początkowy, a następnie po kolejnym jednym podkluczu dla każdej rundy szyfrującej.
