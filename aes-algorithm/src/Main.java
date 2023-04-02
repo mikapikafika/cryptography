@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.util.*;
 
 public class Main {
@@ -20,7 +21,17 @@ public class Main {
 
             switch (num) {
                 case 1 -> {
-                    // blyblybly
+                    AESAlgorithm algorithm = new AESAlgorithm();
+                    byte[][] arr = algorithm.zwroc_blok();
+                    printForTests(arr);
+
+                    arr = algorithm.subBytes(arr);
+                    System.out.println("subBytes");
+                    printForTests(arr);
+
+                    arr = algorithm.shiftRows(arr);
+                    System.out.println("shiftRows");
+                    printForTests(arr);
                 }
                 case 2 -> {
                     // blyblyblyyyy
@@ -38,6 +49,16 @@ public class Main {
         }
     }
 
+    public static void printForTests(byte[][] arr) {
+        for (int i = 0; i < 4; i ++) {
+            for (int j = 0; j < 4; j ++) {
+                System.out.print(arr[i][j] & 0xff);
+                System.out.print(" ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
 
     public static void main(String[] args) {
         showMenu();
