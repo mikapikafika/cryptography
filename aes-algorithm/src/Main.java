@@ -38,12 +38,12 @@ public class Main {
 //                    printForTests(arr);
 
                     arr = algorithm.invShiftRows(arr);
-                    printForTests(arr);
                     System.out.println("invShiftRows");
+                    printForTests(arr);
 
                     arr = algorithm.invSubBytes(arr);
-                    printForTests(arr);
                     System.out.println("invSubBytes");
+                    printForTests(arr);
                 }
                 case 2 -> {
                     // blyblyblyyyy

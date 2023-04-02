@@ -25,7 +25,6 @@ public class AESAlgorithm {
         return tmp;
     }
 
-            byte c2 = state[2][i];
     public byte[][] shiftRows(byte[][] state) {
         byte tmp;
 
@@ -33,10 +32,9 @@ public class AESAlgorithm {
         tmp = state[1][0];
         state[1][0] = state[1][1];
         state[1][1] = state[1][2];
-        state[1][3] = tmp;
         state[1][2] = state[1][3];
+        state[1][3] = tmp;
 
-            state[1][i] = (byte) (c0 ^ mul(0x02, c1) ^ mul(0x03, c2) ^ c3);
         // Shift row 2 by 2
         tmp = state[2][0];
         state[2][0] = state[2][2];
@@ -48,78 +46,32 @@ public class AESAlgorithm {
         // Shift row 3 by 3
         tmp = state[3][3];
         state[3][3] = state[3][2];
-        state[3][1] = state[3][0];
         state[3][2] = state[3][1];
+        state[3][1] = state[3][0];
         state[3][0] = tmp;
 
-    }
         return state; // ??? albo void?
-
-
-
-
-
-
-
     }
+
+    public byte[][] mixColumns(byte[][] state) {
+        for (int i = 0; i < Nb; i++) {
+            byte c0 = state[0][i];
+            byte c1 = state[1][i];
+            byte c2 = state[2][i];
+            byte c3 = state[3][i];
+
+            // 0x02 - like multiplying by x
+            // 0x03 - like multiplying by (x + 1)
+            state[0][i] = (byte) (mul(0x02, c0) ^ mul(0x03, c1) ^ c2 ^ c3);
+            state[1][i] = (byte) (c0 ^ mul(0x02, c1) ^ mul(0x03, c2) ^ c3);
+            state[2][i] = (byte) (c0 ^ c1 ^ mul(0x02, c2) ^ mul(0x03, c3));
+            state[3][i] = (byte) (mul(0x03, c0) ^ c1 ^ c2 ^ mul(0x02, c3));
+        }
 
         return state;
-        state[3][1] = state[3][2];
-        state[3][2] = state[3][3];
-        state[3][3] = tmp;
-
-        // Shift row 3 by 1
-        tmp = state[3][0];
-        state[3][0] = state[3][1];
-
-        tmp = state[2][0];
-        state[2][2] = tmp;
-        tmp = state[2][1];
-        state[2][1] = state[2][3];
-        state[2][3] = tmp;
-        state[2][0] = state[2][2];
-        // Shift row 2 by 2
-        tmp = state[1][3];
-        state[1][3] = state[1][2];
-        state[1][2] = state[1][1];
-        state[1][1] = state[1][0];
-        state[1][0] = tmp;
-            }
-        }
-        return tmp;
     }
 
-    public byte[][] invShiftRows(byte[][] state) {
-        byte tmp;
-
-        // Shift row 1 by 3
-        for (int row = 0; row < Nb; row ++) {
-            for (int col = 0; col < Nb; col ++) {
-                int intValue = (state[row][col] & 0xff);
-                int col_sbox = intValue / Nb;
-                int row_sbox = intValue % Nb;
-                tmp[row][col] = (byte) SBox.getInvertedSBox(row_sbox, col_sbox);
-        // The result of multiplying a and b in GF(2^8) with AES polynomial
-        return (byte) result;
-    }
-
-
-    // Evil versions of methods above be like
-
-    public byte[][] invSubBytes(byte[][] state) {
-        byte[][] tmp = new byte[Nb][Nb];
-            // Carry will happen when b is shifted left
-            boolean carry = (b & 0x80) != 0;
-            b <<= 1;
-            // Shift b 1 bit to the left
-            if (carry) {
-                // XOR b with AES polynomial
-            }
-                b ^= 0x1B;
-        }
-    }
     private byte mul(int a, byte b) {
-
         int result = 0;
 
         for (int i = 0; i < 8; i++) {
@@ -129,21 +81,69 @@ public class AESAlgorithm {
                 result ^= b;
             }
             // Check if left bit of b is 1
-
-    public byte[][] mixColumns(byte[][] state) {
-        for (int i = 0; i < Nb; i++) {
-            byte c1 = state[1][i];
-            byte c0 = state[0][i];
-            byte c3 = state[3][i];
-
-            // 0x02 - like multiplying by x
-            // 0x03 - like multiplying by (x + 1)
-            state[0][i] = (byte) (mul(0x02, c0) ^ mul(0x03, c1) ^ c2 ^ c3);
-            state[2][i] = (byte) (c0 ^ c1 ^ mul(0x02, c2) ^ mul(0x03, c3));
-            state[3][i] = (byte) (mul(0x03, c0) ^ c1 ^ c2 ^ mul(0x02, c3));
+            // Carry will happen when b is shifted left
+            boolean carry = (b & 0x80) != 0;
+            // Shift b 1 bit to the left
+            b <<= 1;
+            if (carry) {
+                // XOR b with AES polynomial
+                b ^= 0x1B;
+            }
         }
+        // The result of multiplying a and b in GF(2^8) with AES polynomial
+        return (byte) result;
+    }
+
+
+    // Evil versions of methods above be like
+
+    public byte[][] invSubBytes(byte[][] state) {
+        byte[][] tmp = new byte[Nb][Nb];
+        for (int row = 0; row < Nb; row ++) {
+            for (int col = 0; col < Nb; col ++) {
+                int intValue = (state[row][col] & 0xff);
+                int col_sbox = intValue / Nb;
+                int row_sbox = intValue % Nb;
+                tmp[row][col] = (byte) SBox.getInvertedSBox(row_sbox, col_sbox);
+            }
+        }
+        return tmp;
+    }
+
+    public byte[][] invShiftRows(byte[][] state) {
+        byte tmp;
+
+        // Shift row 1 by 3
+        tmp = state[1][3];
+        state[1][3] = state[1][2];
+        state[1][2] = state[1][1];
+        state[1][1] = state[1][0];
+        state[1][0] = tmp;
+
+        // Shift row 2 by 2
+        tmp = state[2][0];
+        state[2][0] = state[2][2];
+        state[2][2] = tmp;
+        tmp = state[2][1];
+        state[2][1] = state[2][3];
+        state[2][3] = tmp;
+
+        // Shift row 3 by 1
+        tmp = state[3][0];
+        state[3][0] = state[3][1];
+        state[3][1] = state[3][2];
+        state[3][2] = state[3][3];
+        state[3][3] = tmp;
 
         return state;
+    }
+
+
+
+
+
+
+
     /* Przygotowanie podkluczy:
         generowany jest jeden podklucz początkowy, a następnie po kolejnym jednym podkluczu dla każdej rundy szyfrującej.
      */
