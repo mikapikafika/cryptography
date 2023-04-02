@@ -32,6 +32,10 @@ public class Main {
                     arr = algorithm.shiftRows(arr);
                     System.out.println("shiftRows");
                     printForTests(arr);
+
+                    arr = algorithm.mixColumns(arr);
+                    System.out.println("mixColumns");
+                    printForTests(arr);
                 }
                 case 2 -> {
                     // blyblyblyyyy

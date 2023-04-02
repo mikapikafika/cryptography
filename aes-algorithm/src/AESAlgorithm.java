@@ -53,8 +53,46 @@ public class AESAlgorithm {
         return state; // ??? albo void?
     }
 
+    public byte[][] mixColumns(byte[][] state) {
+        for (int i = 0; i < Nb; i++) {
+            byte c0 = state[0][i];
+            byte c1 = state[1][i];
+            byte c2 = state[2][i];
+            byte c3 = state[3][i];
 
+            // 0x02 - like multiplying by x
+            // 0x03 - like multiplying by (x + 1)
+            state[0][i] = (byte) (mul(0x02, c0) ^ mul(0x03, c1) ^ c2 ^ c3);
+            state[1][i] = (byte) (c0 ^ mul(0x02, c1) ^ mul(0x03, c2) ^ c3);
+            state[2][i] = (byte) (c0 ^ c1 ^ mul(0x02, c2) ^ mul(0x03, c3));
+            state[3][i] = (byte) (mul(0x03, c0) ^ c1 ^ c2 ^ mul(0x02, c3));
+        }
 
+        return state;
+    }
+
+    private byte mul(int a, byte b) {
+        int result = 0;
+
+        for (int i = 0; i < 8; i++) {
+            // Check if the i-th bit of a is 1
+            if (((a >> i) & 0x01) == 1) {
+                // XOR result with b - adding b
+                result ^= b;
+            }
+            // Check if left bit of b is 1
+            // Carry will happen when b is shifted left
+            boolean carry = (b & 0x80) != 0;
+            // Shift b 1 bit to the left
+            b <<= 1;
+            if (carry) {
+                // XOR b with AES polynomial
+                b ^= 0x1B;
+            }
+        }
+        // The result of multiplying a and b in GF(2^8) with AES polynomial
+        return (byte) result;
+    }
 
 
 
