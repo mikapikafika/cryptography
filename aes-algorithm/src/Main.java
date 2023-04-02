@@ -33,8 +33,16 @@ public class Main {
                     System.out.println("shiftRows");
                     printForTests(arr);
 
-                    arr = algorithm.mixColumns(arr);
-                    System.out.println("mixColumns");
+//                    arr = algorithm.mixColumns(arr);
+//                    System.out.println("mixColumns");
+//                    printForTests(arr);
+
+                    arr = algorithm.invShiftRows(arr);
+                    System.out.println("invShiftRows");
+                    printForTests(arr);
+
+                    arr = algorithm.invSubBytes(arr);
+                    System.out.println("invSubBytes");
                     printForTests(arr);
                 }
                 case 2 -> {
