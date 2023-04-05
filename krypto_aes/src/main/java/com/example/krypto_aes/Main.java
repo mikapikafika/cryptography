@@ -50,6 +50,7 @@ public class Main {
                     // blyblyblyyyy
                 }
                 case 3 -> {
+
                     scanner.close();
                     return;
                 }
@@ -62,9 +63,9 @@ public class Main {
         }
     }
 
-    public static void printForTests(byte[][] arr) {
-        for (int i = 0; i < 4; i ++) {
-            for (int j = 0; j < 4; j ++) {
+    public static void printForTests(byte[][] arr) {  //col wise
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
                 System.out.print(arr[i][j] & 0xff);
                 System.out.print(" ");
             }
@@ -72,6 +73,7 @@ public class Main {
         }
         System.out.println();
     }
+
 
     public static void main(String[] args) {
         showMenu();
