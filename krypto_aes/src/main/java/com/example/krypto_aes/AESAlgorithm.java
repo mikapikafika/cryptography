@@ -19,8 +19,8 @@ public class AESAlgorithm {
         for (int row = 0; row < Nb; row ++) {
             for (int col = 0; col < Nb; col ++) {
                 int intValue = (state[row][col] & 0xff);  // robin inta z bajta
-                int col_sbox = intValue / Nb; // 28
-                int row_sbox = intValue % Nb;  // 2
+                int col_sbox = intValue % 16;
+                int row_sbox = intValue / 16;
                 tmp[row][col] = (byte) SBox.getSBox(row_sbox, col_sbox);
             }
         }
@@ -104,8 +104,8 @@ public class AESAlgorithm {
         for (int row = 0; row < Nb; row ++) {
             for (int col = 0; col < Nb; col ++) {
                 int intValue = (state[row][col] & 0xff);
-                int col_sbox = intValue / Nb;
-                int row_sbox = intValue % Nb;
+                int col_sbox = intValue % 16;
+                int row_sbox = intValue / 16;
                 tmp[row][col] = (byte) SBox.getInvertedSBox(row_sbox, col_sbox);
             }
         }
