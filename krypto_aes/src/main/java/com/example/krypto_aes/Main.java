@@ -1,5 +1,6 @@
 package com.example.krypto_aes;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 public class Main {
@@ -48,6 +49,14 @@ public class Main {
                 }
                 case 2 -> {
                     // blyblyblyyyy
+                    KeyHandler keyHandler = new KeyHandler();
+                    try {
+                        byte[] array;
+                        array = keyHandler.generateKey(128);
+                        print1DArray(array);
+                    } catch (NoSuchAlgorithmException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
                 case 3 -> {
 
@@ -72,6 +81,15 @@ public class Main {
             System.out.println();
         }
         System.out.println();
+    }
+    public static void print1DArray(byte[]arr) {
+        for (int i = 0; i < arr.length; i += 4) {
+            for (int j = i; j < i + 4 && j < arr.length; j++) {
+                System.out.print(arr[j] & 0xff);
+                System.out.print(" ");
+            }
+            System.out.println();
+        }
     }
 
 
