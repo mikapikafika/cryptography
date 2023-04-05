@@ -1,4 +1,4 @@
-package krypto.aes;
+package com.example.krypto_aes;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

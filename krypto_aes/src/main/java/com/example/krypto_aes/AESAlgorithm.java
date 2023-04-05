@@ -1,4 +1,4 @@
-package krypto.aes;
+package com.example.krypto_aes;
 
 public class AESAlgorithm {
     // 16 bajtów do jakis testów// xd

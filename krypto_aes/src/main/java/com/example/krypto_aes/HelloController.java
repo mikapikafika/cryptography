@@ -1,4 +1,4 @@
-package krypto.aes;
+package com.example.krypto_aes;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
