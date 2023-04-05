@@ -1,3 +1,5 @@
+package krypto.aes;
+
 public class SBox {
     private static int[] sBox = {
             0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76,
@@ -44,29 +46,4 @@ public class SBox {
     public static int getInvertedSBox(int x, int y) {
         return invertedSBox[x * 16 + y];
     }
-
-    // 2D VARIANT
-//    /**
-//     * Extracts 2 lower bits and 2 higher bits of the byte
-//     * to look up a value in sBox using getSBox()
-//     * @param b byte, input
-//     * @return value from sBox
-//     */
-//    public static byte translateSBox(byte b) {
-//        int x = (b & 0b11110000) >> 4;
-//        int y = b & 0b00001111;
-//        return (byte) getSBox()[x][y];
-//    }
-//
-//    /**
-//     * Extracts 2 lower bits and 2 higher bits of the byte
-//     * to look up a value in inversedSBox using getInversedSBox()
-//     * @param b byte, input
-//     * @return value from inversedSBox
-//     */
-//    public static byte translateInversedSBox(byte b) {
-//        int x = (b & 0b11110000) >> 4;
-//        int y = b & 0b00001111;
-//        return (byte) getInversedSBox()[x][y];
-//    }
 }
