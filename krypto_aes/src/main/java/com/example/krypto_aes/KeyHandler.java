@@ -28,6 +28,7 @@ public class KeyHandler {
     };
 
 
+
     public void expandKey(byte[] key, int Nk, int Nb, int Nr, int[] word) {
         int i = 0;
         while (i < Nk) {
@@ -55,8 +56,43 @@ public class KeyHandler {
         }
     }
 
+    public void expandKeyForTests(byte[] key, int Nk, int Nb, int Nr, int[] word) {
+        int i = 0;
+        while (i < Nk) {
+            word[i] = (key[4 * i] << 24) | ((key[4 * i + 1] & 0xff) << 16) | ((key[4 * i + 2] & 0xff) << 8) | (key[4 * i + 3] & 0xff);
+            i++;
+        }
 
-    public int subWord(int word) {
+        i = Nk;
+
+        while (i < Nb * (Nr + 1)) {
+            int temp = word[i - 1];
+            System.out.printf("i = %d \t temp = %08x\n", i, temp);
+
+            if (i % Nk == 0) {
+                int rotWordResult = rotWord(temp);
+                int subWordResult = subWord(rotWordResult);
+                int rConResult = rCon[i / Nk];
+                temp = subWordResult ^ rConResult;
+                System.out.printf("after rotWord = %08x \t after subWord = %08x \t rCon [i/Nk] = %08x\ntemp now = %08x\n", rotWordResult, subWordResult, rConResult, temp);
+            } else if (Nk > 6 && i % Nk == 4) {
+                temp = subWord(temp);
+                System.out.printf("temp after only subWord = %08x\n", temp);
+            }
+            int wordNk = word[i - Nk];
+            word[i] = word[i - Nk] ^ temp;
+            System.out.printf("temp now = %08x\nword[i-Nk] = %08x \t word[i] after XOR = %08x\n\n\n", temp, wordNk, word[i]);
+            i++;
+        }
+
+        System.out.println("Expanded Key:");
+        for (int k = 0; k < Nb * (Nr + 1); k++) {
+            System.out.printf("w%d = %08x\n", k, word[k]);
+        }
+    }
+
+
+    private int subWord(int word) {
         int result = 0;
         for (int i = 0; i < 4; i++) {
             int intFromByte = (word >>> (8 * i)) & 0xff;
@@ -72,7 +108,7 @@ public class KeyHandler {
 //                (SBox.getSBox(word & 0xff));
 //    }
 
-    public int rotWord(int word) {
+    private int rotWord(int word) {
 //        return ((word << 8) & 0xffffff00) | ((word >>> 24) & 0xff);
         return (word << 8) | (word >>> 24);
 

@@ -64,7 +64,7 @@ public class Main {
                     byte[] cipherKey = {(byte) 0x2b, 0x7e, 0x15, 0x16, 0x28, (byte) 0xae, (byte) 0xd2, (byte) 0xa6,
                                         (byte) 0xab, (byte) 0xf7, 0x15, (byte) 0x88, 0x09, (byte) 0xcf, 0x4f, 0x3c};
                     int[] expandedKey = new int[4 * (10 + 1)];
-                    keyHandler.expandKey(cipherKey, 4, 4, 10, expandedKey);
+                    keyHandler.expandKeyForTests(cipherKey, 4, 4, 10, expandedKey);
                 }
 
                 default -> {

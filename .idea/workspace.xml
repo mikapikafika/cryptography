@@ -6,10 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="9da297fd-f4d5-494f-b495-0b4ef88f84a4" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/krypto_aes/src/main/java/com/example/krypto_aes/AESAlgorithm.java" beforeDir="false" afterPath="$PROJECT_DIR$/krypto_aes/src/main/java/com/example/krypto_aes/AESAlgorithm.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/krypto_aes/src/main/java/com/example/krypto_aes/KeyHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/krypto_aes/src/main/java/com/example/krypto_aes/KeyHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/krypto_aes/src/main/java/com/example/krypto_aes/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/krypto_aes/src/main/java/com/example/krypto_aes/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/krypto_aes/src/main/java/com/example/krypto_aes/SBox.java" beforeDir="false" afterPath="$PROJECT_DIR$/krypto_aes/src/main/java/com/example/krypto_aes/SBox.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,7 +68,7 @@
       <option name="presentableId" value="Default" />
       <updated>1680706859921</updated>
       <workItem from="1680706862539" duration="10000" />
-      <workItem from="1680775412848" duration="5057000" />
+      <workItem from="1680775412848" duration="7917000" />
     </task>
     <servers />
   </component>
