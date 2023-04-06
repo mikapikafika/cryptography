@@ -42,6 +42,10 @@ public class SBox {
         return sBox[x * 16 + y];
     }
 
+//    public static int getSBox(int index) {
+//        return sBox[index];
+//    }
+
     // Returns invertedSBox of given coordinates
     public static int getInvertedSBox(int x, int y) {
         return invertedSBox[x * 16 + y];

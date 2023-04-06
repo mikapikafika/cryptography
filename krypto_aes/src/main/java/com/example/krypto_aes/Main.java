@@ -16,6 +16,7 @@ public class Main {
             System.out.println("[1] - Encode a file");
             System.out.println("[2] - Decode a file");
             System.out.println("[3] - Exit the program");
+            System.out.println("[4] - Test the key :)");
             System.out.print("Enter a number: ");
 
             int num = scanner.nextInt();
@@ -34,10 +35,6 @@ public class Main {
                     arr = algorithm.shiftRows(arr);
                     System.out.println("shiftRows");
                     printForTests(arr);
-
-//                    arr = algorithm.mixColumns(arr);
-//                    System.out.println("mixColumns");
-//                    printForTests(arr);
 
                     arr = algorithm.invShiftRows(arr);
                     System.out.println("invShiftRows");
@@ -59,10 +56,17 @@ public class Main {
                     }
                 }
                 case 3 -> {
-
                     scanner.close();
                     return;
                 }
+                case 4 -> {
+                    KeyHandler keyHandler = new KeyHandler();
+                    byte[] cipherKey = {(byte) 0x2b, 0x7e, 0x15, 0x16, 0x28, (byte) 0xae, (byte) 0xd2, (byte) 0xa6,
+                                        (byte) 0xab, (byte) 0xf7, 0x15, (byte) 0x88, 0x09, (byte) 0xcf, 0x4f, 0x3c};
+                    int[] expandedKey = new int[4 * (10 + 1)];
+                    keyHandler.expandKey(cipherKey, 4, 4, 10, expandedKey);
+                }
+
                 default -> {
                     System.out.println("Invalid option selected, leaving the program... ");
                     scanner.close();

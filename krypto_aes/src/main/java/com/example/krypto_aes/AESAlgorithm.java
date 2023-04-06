@@ -4,6 +4,9 @@ public class AESAlgorithm {
     // 16 bajtów do jakis testów// xd
 
     private final int Nb = 4;
+    private final int Nk = 4;
+    private final int Nr = 10;
+    int[] expandedKey = new int[Nb * (Nr + 1)]; //expandKey(key, Nk, Nb, Nr, expandedKey);
     private byte[][] blok_podzielony = new byte[4][4];
     public byte[][] zwroc_blok() {
         String string = "rowerrowerrowerr";
