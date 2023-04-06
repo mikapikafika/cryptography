@@ -26,6 +26,7 @@ public class Main {
                 case 1 -> {
                     String string = "rowerrowerrowerr";
                     byte[] blok = string.getBytes();
+                    System.out.println("default");
                     print1DArray(blok);
                     KeyHandler keyHandler = new KeyHandler();
                     AESAlgorithm algorithm = new AESAlgorithm();
@@ -40,7 +41,12 @@ public class Main {
                     }
 
                     byte[] afterEncrypting = algorithm.encrypt(blok);
+                    System.out.println("after encryption");
                     print1DArray(afterEncrypting);
+                    byte[] afterDecrypting = algorithm.decrypt(afterEncrypting);
+                    System.out.println("after decryption");
+                    print1DArray(afterDecrypting);
+
                 }
                 case 2 -> {
                     // blyblyblyyyy
@@ -54,13 +60,18 @@ public class Main {
                     }
                 }
                 case 3 -> {
+
+                    AESAlgorithm algorithm = new AESAlgorithm();
+
+
+
                     scanner.close();
                     return;
                 }
                 case 4 -> {
                     KeyHandler keyHandler = new KeyHandler();
                     byte[] cipherKey = {(byte) 0x2b, 0x7e, 0x15, 0x16, 0x28, (byte) 0xae, (byte) 0xd2, (byte) 0xa6,
-                                        (byte) 0xab, (byte) 0xf7, 0x15, (byte) 0x88, 0x09, (byte) 0xcf, 0x4f, 0x3c};
+                            (byte) 0xab, (byte) 0xf7, 0x15, (byte) 0x88, 0x09, (byte) 0xcf, 0x4f, 0x3c};
                     int[] expandedKey = new int[4 * (10 + 1)];
                     keyHandler.expandKeyForTests(cipherKey, 4, 4, 10, expandedKey);
                 }
@@ -84,7 +95,8 @@ public class Main {
         }
         System.out.println();
     }
-    public static void print1DArray(byte[]arr) {
+
+    public static void print1DArray(byte[] arr) {
         for (int i = 0; i < arr.length; i += 4) {
             for (int j = i; j < i + 4 && j < arr.length; j++) {
                 System.out.print(arr[j] & 0xff);

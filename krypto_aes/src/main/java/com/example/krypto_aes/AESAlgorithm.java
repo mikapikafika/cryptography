@@ -56,6 +56,27 @@ public class AESAlgorithm {
             tmp[i] = state[i / 4][i%4];
         return tmp;
     }
+
+    public byte[] decrypt(byte[] in) {
+        byte[] tmp = new byte[in.length];
+        byte[][] state = new byte[Nb][Nb];
+        for (int i = 0; i < in.length; i++) {
+            state[i / 4][i % 4] = in[i];
+        }
+        addRoundKey(state, expandedKey, Nr);
+        for (int i = Nr - 1 ; i >= 1; i--) {
+            state = invSubBytes(state);
+            state = invShiftRows(state);
+            state = invMixColumns(state);
+            addRoundKey(state, expandedKey, i);
+        }
+        state = invSubBytes(state);
+        state = invShiftRows(state);
+        addRoundKey(state, expandedKey, 0);
+        for (int i = 0; i < tmp.length; i++)
+            tmp[i] = state[i / 4][i%4];
+        return tmp;
+    }
     private byte[] splitIntToFourBytes(int intValue) {
         byte[] result = new byte[Nb];
         result[0] = (byte) ((intValue >> 24) & 0xFF);
@@ -200,6 +221,36 @@ public class AESAlgorithm {
 
         return state;
     }
+    public byte[][] invMixColumns(byte[][] state) {  // autor - chat gpt xd
+        for (int i = 0; i < Nb; i++) {
+            byte c0 = state[0][i];
+            byte c1 = state[1][i];
+            byte c2 = state[2][i];
+            byte c3 = state[3][i];
+
+            // 0x0E - like multiplying by (x^3 + x^2 + x)
+            // 0x0B - like multiplying by (x^3 + x + 1)
+            // 0x0D - like multiplying by (x^3 + x^2 + 1)
+            // 0x09 - like multiplying by (x^3 + 1)
+            state[0][i] = (byte) (mul(0x0E, c0) ^ mul(0x0B, c1) ^ mul(0x0D, c2) ^ mul(0x09, c3));
+            state[1][i] = (byte) (mul(0x09, c0) ^ mul(0x0E, c1) ^ mul(0x0B, c2) ^ mul(0x0D, c3));
+            state[2][i] = (byte) (mul(0x0D, c0) ^ mul(0x09, c1) ^ mul(0x0E, c2) ^ mul(0x0B, c3));
+            state[3][i] = (byte) (mul(0x0B, c0) ^ mul(0x0D, c1) ^ mul(0x09, c2) ^ mul(0x0E, c3));
+        }
+
+        return state;
+    }
+
+    public byte[][] byteArrayToState(byte[] byteArray) { // z 1D do 2D tablicy
+        byte[][] state = new byte[4][4];
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                state[j][i] = byteArray[i * 4 + j];
+            }
+        }
+        return state;
+    }
+
 
 
 
