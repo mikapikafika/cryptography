@@ -42,7 +42,7 @@ public class KeyHandler {
             int temp = word[i - 1];
 
             if (i % Nk == 0) {
-                temp = subWord(rotWord(temp)) ^ rCon[i / Nk];
+                temp = subWord(rotWord(temp)) ^ rCon[(i - 1) / Nk];
             } else if (Nk > 6 && i % Nk == 4) {
                 temp = subWord(temp);
             }
@@ -72,7 +72,7 @@ public class KeyHandler {
             if (i % Nk == 0) {
                 int rotWordResult = rotWord(temp);
                 int subWordResult = subWord(rotWordResult);
-                int rConResult = rCon[i / Nk];
+                int rConResult = rCon[(i - 1) / Nk];
                 temp = subWordResult ^ rConResult;
                 System.out.printf("after rotWord = %08x \t after subWord = %08x \t rCon [i/Nk] = %08x\ntemp now = %08x\n", rotWordResult, subWordResult, rConResult, temp);
             } else if (Nk > 6 && i % Nk == 4) {
