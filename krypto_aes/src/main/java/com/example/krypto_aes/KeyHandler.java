@@ -15,73 +15,104 @@ public class KeyHandler {
         SecretKey secretKey = key.generateKey();
         return secretKey.getEncoded();
     }
-    private static final byte[] rCon = {
-            (byte) 0x01, (byte) 0x02, (byte) 0x04, (byte) 0x08, (byte) 0x10, (byte) 0x20, (byte) 0x40, (byte) 0x80, (byte) 0x1b, (byte) 0x36, (byte) 0x6c, (byte) 0xd8, (byte) 0xab, (byte) 0x4d, (byte) 0x9a, (byte) 0x2f
+//    private static final byte[] rCon = {
+//            (byte) 0x01, (byte) 0x02, (byte) 0x04, (byte) 0x08, (byte) 0x10, (byte) 0x20, (byte) 0x40, (byte) 0x80,
+//            (byte) 0x1b, (byte) 0x36, (byte) 0x6c, (byte) 0xd8, (byte) 0xab, (byte) 0x4d, (byte) 0x9a, (byte) 0x2f
+//    };
+
+    private static final int[] rCon = {
+            0x01000000, 0x02000000, 0x04000000, 0x08000000,
+            0x10000000, 0x20000000, 0x40000000, 0x80000000,
+            0x1B000000, 0x36000000, 0x6C000000, 0xD8000000,
+            0xAB000000, 0x4D000000, 0x9A000000, 0x2F000000
     };
 
-    public SecretKey expandKey(SecretKey key) {
-        int keySize = key.getEncoded().length * 8;
-        int numRounds = 0;
-        switch(keySize) {
-            case 128:
-                numRounds = 10;
-                break;
-            case 192:
-                numRounds = 12;
-                break;
-            case 256:
-                numRounds = 14;
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid key size: " + keySize);
+
+
+    public void expandKey(byte[] key, int Nk, int Nb, int Nr, int[] word) {
+        int i = 0;
+        while (i < Nk) {
+            word[i] = (key[4 * i] << 24) | ((key[4 * i + 1] & 0xff) << 16) | ((key[4 * i + 2] & 0xff) << 8) | (key[4 * i + 3] & 0xff);
+            i++;
         }
 
-        byte[] expandedKey = new byte[(numRounds + 1) * 16];
-        byte[] temp = new byte[4];
-//        int rconIteration = 1;
-        System.arraycopy(key.getEncoded(), 0, expandedKey, 0, key.getEncoded().length);
+        i = Nk;
 
-        // TO CHYBA POWINNO BYĆ W JAKIEJŚ PĘTLI
+        while (i < Nb * (Nr + 1)) {
+            int temp = word[i - 1];
 
-        // Przepisanie 4 ostatnich bajtów aktualnego rozszerzonego klucza do tymczasowego wektora 4-bajtowego.
-        for (int i = key.getEncoded().length; i < expandedKey.length; i += 4) {
-            System.arraycopy(expandedKey, i - 4, temp, 0, 4);
-
-
-            // Wykonanie rotacji bajtów w wektorze o jedną pozycję w lewo. Skrajnie lewy bajt należy przepisać na skrajnie prawą pozycję.
-            byte rotate = temp[0];
-            temp[0] = temp[1];
-            temp[1] = temp[2];
-            temp[2] = temp[3];
-            temp[3] = rotate;
-
-            // Zastąpienie każdego bajtu w wektorze innym bajtem, bazując na S-Box'ach.
-            for (int j = 0; j < 4; j++) {
-                int intFromByte = temp[j] & 0xff;
-                temp[j] = (byte) SBox.getSBox(intFromByte / 16, intFromByte % 16);
+            if (i % Nk == 0) {
+                temp = subWord(rotWord(temp)) ^ rCon[i / Nk];
+            } else if (Nk > 6 && i % Nk == 4) {
+                temp = subWord(temp);
             }
-            temp[0] ^= rCon[i/4];
-            // Operacja Rcon: zsumowanie XOR najbardziej lewego bajtu w wektorze z dwójką podniesioną do potęgi (numer aktualnej iteracji - 1).
-
-
-
-            // XOR the current 4-byte word with the block `n` bytes before the end of the current key
-            for (int j = 0; j < 4; j++) {
-                expandedKey[i + j] = (byte) (expandedKey[i + j - key.getEncoded().length] ^ temp[j]);
-            }
-
-            // Zsumowanie XOR otrzymanego 4-bajtowego wektora z 4-bajtowym blokiem zaczynającym się n bajtów przed aktualnym
-            // końcem klucza, a następnie dopisanie wyniku na koniec rozszerzanego klucza. W ten sposób otrzymuje się nowe 4 bajty rozszerzanego klucza.
-            for (int j = 0; j < 4; j++) {
-                expandedKey[i + j] = (byte) (expandedKey[i + j - 4] ^ temp[j]);
-            }
+            word[i] = word[i - Nk] ^ temp;
+            i++;
         }
 
+        System.out.println("Expanded Key:");
+        for (int k = 0; k < Nb * (Nr + 1); k++) {
+            System.out.printf("w%d = %08x\n", k, word[k]);
+        }
+    }
 
-        return new SecretKeySpec(expandedKey, "AES");
+    public void expandKeyForTests(byte[] key, int Nk, int Nb, int Nr, int[] word) {
+        int i = 0;
+        while (i < Nk) {
+            word[i] = (key[4 * i] << 24) | ((key[4 * i + 1] & 0xff) << 16) | ((key[4 * i + 2] & 0xff) << 8) | (key[4 * i + 3] & 0xff);
+            i++;
+        }
+
+        i = Nk;
+
+        while (i < Nb * (Nr + 1)) {
+            int temp = word[i - 1];
+            System.out.printf("i = %d \t temp = %08x\n", i, temp);
+
+            if (i % Nk == 0) {
+                int rotWordResult = rotWord(temp);
+                int subWordResult = subWord(rotWordResult);
+                int rConResult = rCon[i / Nk];
+                temp = subWordResult ^ rConResult;
+                System.out.printf("after rotWord = %08x \t after subWord = %08x \t rCon [i/Nk] = %08x\ntemp now = %08x\n", rotWordResult, subWordResult, rConResult, temp);
+            } else if (Nk > 6 && i % Nk == 4) {
+                temp = subWord(temp);
+                System.out.printf("temp after only subWord = %08x\n", temp);
+            }
+            int wordNk = word[i - Nk];
+            word[i] = word[i - Nk] ^ temp;
+            System.out.printf("temp now = %08x\nword[i-Nk] = %08x \t word[i] after XOR = %08x\n\n\n", temp, wordNk, word[i]);
+            i++;
+        }
+
+        System.out.println("Expanded Key:");
+        for (int k = 0; k < Nb * (Nr + 1); k++) {
+            System.out.printf("w%d = %08x\n", k, word[k]);
+        }
     }
 
 
+    private int subWord(int word) {
+        int result = 0;
+        for (int i = 0; i < 4; i++) {
+            int intFromByte = (word >>> (8 * i)) & 0xff;
+            result = result | (SBox.getSBox(intFromByte / 16, intFromByte % 16) << (8 * i));
+        }
+        return result;
+    }
+
+//    private int subWord(int word) {
+//        return (SBox.getSBox((word >> 24) & 0xff) << 24) |
+//                (SBox.getSBox((word >> 16) & 0xff) << 16) |
+//                (SBox.getSBox((word >> 8) & 0xff) << 8) |
+//                (SBox.getSBox(word & 0xff));
+//    }
+
+    private int rotWord(int word) {
+//        return ((word << 8) & 0xffffff00) | ((word >>> 24) & 0xff);
+        return (word << 8) | (word >>> 24);
+
+    }
 
 
 }
