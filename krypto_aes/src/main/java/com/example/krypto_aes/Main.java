@@ -24,25 +24,23 @@ public class Main {
 
             switch (num) {
                 case 1 -> {
+                    String string = "rowerrowerrowerr";
+                    byte[] blok = string.getBytes();
+                    print1DArray(blok);
+                    KeyHandler keyHandler = new KeyHandler();
                     AESAlgorithm algorithm = new AESAlgorithm();
-                    byte[][] arr = algorithm.zwroc_blok();
-                    printForTests(arr);
+                    try {
+                        byte[] primaryKey = keyHandler.generateKey(128);
+                        int[] expandedKey = new int[4 * (10 + 1)]; //tak z dupy to na razie jest xddd
+                        keyHandler.expandKey(primaryKey, 4, 4, 10, expandedKey);
+                        algorithm.setPrimaryKey(primaryKey);
+                        algorithm.setExpandedKey(expandedKey);
+                    } catch (NoSuchAlgorithmException e) {
+                        throw new RuntimeException(e);
+                    }
 
-                    arr = algorithm.subBytes(arr);
-                    System.out.println("subBytes");
-                    printForTests(arr);
-
-                    arr = algorithm.shiftRows(arr);
-                    System.out.println("shiftRows");
-                    printForTests(arr);
-
-                    arr = algorithm.invShiftRows(arr);
-                    System.out.println("invShiftRows");
-                    printForTests(arr);
-
-                    arr = algorithm.invSubBytes(arr);
-                    System.out.println("invSubBytes");
-                    printForTests(arr);
+                    byte[] afterEncrypting = algorithm.encrypt(blok);
+                    print1DArray(afterEncrypting);
                 }
                 case 2 -> {
                     // blyblyblyyyy

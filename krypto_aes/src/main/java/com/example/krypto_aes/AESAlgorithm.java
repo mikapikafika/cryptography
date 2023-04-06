@@ -1,26 +1,84 @@
 package com.example.krypto_aes;
 
+import javax.crypto.SecretKey;
+
 public class AESAlgorithm {
-    // 16 bajtów do jakis testów// xd
+    //TODO użytkownik może wygenerować klucz, lub wczytać go do pliku i może zapisac go do pliku
 
     private final int Nb = 4;
-    private final int Nk = 4;
-    private final int Nr = 10;
-    int[] expandedKey = new int[Nb * (Nr + 1)]; //expandKey(key, Nk, Nb, Nr, expandedKey);
-    private byte[][] blok_podzielony = new byte[4][4];
-    public byte[][] zwroc_blok() {
-        String string = "rowerrowerrowerr";
-        byte[] blok = string.getBytes();
-        for (int i = 0; i < 16; i++) {
-            blok_podzielony[i / Nb][i % Nb] = blok[i];  // to nie jest kolumn order ale tak ma rogowski
-        }
-        return blok_podzielony;
-    } // 128 bitow 16 bajtow 4x4
+    private int Nk;  //number od 32-bit words Nk = 4, 6, 8
+    private int Nr; // moze byc zmienne
+//    int[] expandedKey = new int[Nb * (Nr + 1)]; //expandKey(key, Nk, Nb, Nr, expandedKey);
+    int[] expandedKey;
+    byte[] primaryKey;
 
-    public byte[][] subBytes(byte[][] state) {  // ogolnie duza niewiadoma dla mnie jest ta numeracja w tych bloakch 4x4
-        byte[][] tmp = new byte[Nb][Nb];          // na razie na pałe to jakos robie
-        for (int row = 0; row < Nb; row ++) {
-            for (int col = 0; col < Nb; col ++) {
+    public void setPrimaryKey(byte[] primaryKey) {
+        this.primaryKey = primaryKey;
+        int keySize = primaryKey.length * 8;
+        switch (keySize) {
+            case 128 -> {
+                this.Nr = 10;
+                this.Nk = 4;
+            }
+            case 192 -> {
+                this.Nr = 12;
+                this.Nk = 6;
+            }
+            case 256 -> {
+                this.Nr = 14;
+                this.Nk = 8;
+            }
+            default -> throw new IllegalArgumentException("Invalid key size: " + keySize);
+        }
+    }
+
+    public void setExpandedKey(int[] expandedKey) {
+        this.expandedKey = expandedKey;
+    }
+
+    public byte[] encrypt(byte[] in) {
+        byte[] tmp = new byte[in.length];
+        byte[][] state = new byte[Nb][Nb];
+        for (int i = 0; i < in.length; i++) {
+            state[i / 4][i % 4] = in[i];
+        }
+        addRoundKey(state, expandedKey, 0);
+        for (int i = 1; i < Nr; i++) {
+            state = subBytes(state);
+            state = shiftRows(state);
+            state = mixColumns(state);
+            addRoundKey(state, expandedKey, i);
+        }
+        state = subBytes(state);
+        state = shiftRows(state);
+        addRoundKey(state, expandedKey, Nr);
+        for (int i = 0; i < tmp.length; i++)
+            tmp[i] = state[i / 4][i%4];
+        return tmp;
+    }
+    private byte[] splitIntToFourBytes(int intValue) {
+        byte[] result = new byte[Nb];
+        result[0] = (byte) ((intValue >> 24) & 0xFF);
+        result[1] = (byte) ((intValue >> 16) & 0xFF);
+        result[2] = (byte) ((intValue >> 8) & 0xFF);
+        result[3] = (byte) (intValue & 0xFF);
+        return result;
+    }
+    private void addRoundKey(byte[][] state, int[] expandedKey, int round) { // na referencji po prostu operuje
+        int start = Nb * round;                                              // zawsze mozna to zmienic
+        for (int i = 0; i < Nb; i++) {
+            byte[] fourBytes = splitIntToFourBytes(expandedKey[start + i]); // mam juz 4 bajty
+            for (int j = 0; j < Nb; j++) {
+                state[i][j] ^= fourBytes[j];
+            }
+        }
+    }
+
+
+    public byte[][] subBytes(byte[][] state) {
+        byte[][] tmp = new byte[Nb][Nb];
+        for (int row = 0; row < Nb; row++) {
+            for (int col = 0; col < Nb; col++) {
                 int intValue = (state[row][col] & 0xff);  // robin inta z bajta
                 int col_sbox = intValue % 16;
                 int row_sbox = intValue / 16;
@@ -104,8 +162,8 @@ public class AESAlgorithm {
 
     public byte[][] invSubBytes(byte[][] state) {
         byte[][] tmp = new byte[Nb][Nb];
-        for (int row = 0; row < Nb; row ++) {
-            for (int col = 0; col < Nb; col ++) {
+        for (int row = 0; row < Nb; row++) {
+            for (int col = 0; col < Nb; col++) {
                 int intValue = (state[row][col] & 0xff);
                 int col_sbox = intValue % 16;
                 int row_sbox = intValue / 16;
@@ -167,7 +225,6 @@ public class AESAlgorithm {
     /* Runda kończąca:
         wykonywane są te same operacje co w normalnych rundach szyfrujących, z wyjątkiem operacji mnożenia kolumn, która w Rundzie Kończącej jest pomijana.
      */
-
 
 
 }

@@ -50,10 +50,10 @@ public class KeyHandler {
             i++;
         }
 
-        System.out.println("Expanded Key:");
-        for (int k = 0; k < Nb * (Nr + 1); k++) {
-            System.out.printf("w%d = %08x\n", k, word[k]);
-        }
+//        System.out.println("Expanded Key:");
+//        for (int k = 0; k < Nb * (Nr + 1); k++) {
+//            System.out.printf("w%d = %08x\n", k, word[k]);
+//        }
     }
 
     public void expandKeyForTests(byte[] key, int Nk, int Nb, int Nr, int[] word) {
