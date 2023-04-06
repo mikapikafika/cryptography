@@ -4,11 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
 public class HelloController {
-    @FXML
-    private Label welcomeText;
+    AESAlgorithm algorithm = new AESAlgorithm();
+    KeyHandler keyHandler = new KeyHandler();
 
-    @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
-    }
 }

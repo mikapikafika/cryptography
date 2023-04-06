@@ -3,7 +3,7 @@ package com.example.krypto_aes;
 import javax.crypto.SecretKey;
 
 public class AESAlgorithm {
-    //TODO użytkownik może wygenerować klucz, lub wczytać go do pliku i może zapisac go do pliku
+    //TODO metoda encode i decode juz na plikach, tekscie etc
 
     private final int Nb = 4;
     private int Nk;  //number od 32-bit words Nk = 4, 6, 8
@@ -44,13 +44,13 @@ public class AESAlgorithm {
         }
         addRoundKey(state, expandedKey, 0);
         for (int i = 1; i < Nr; i++) {
-            state = subBytes(state);
-            state = shiftRows(state);
-            state = mixColumns(state);
+            subBytes(state);
+            shiftRows(state);
+            mixColumns(state);
             addRoundKey(state, expandedKey, i);
         }
-        state = subBytes(state);
-        state = shiftRows(state);
+        subBytes(state);
+        shiftRows(state);
         addRoundKey(state, expandedKey, Nr);
         for (int i = 0; i < tmp.length; i++)
             tmp[i] = state[i / 4][i%4];
@@ -65,13 +65,14 @@ public class AESAlgorithm {
         }
         addRoundKey(state, expandedKey, Nr);
         for (int i = Nr - 1 ; i >= 1; i--) {
-            state = invSubBytes(state);
-            state = invShiftRows(state);
-            state = invMixColumns(state);
+            invSubBytes(state);
+            invShiftRows(state);
             addRoundKey(state, expandedKey, i);
+            invMixColumns(state);
+
         }
-        state = invSubBytes(state);
-        state = invShiftRows(state);
+        invSubBytes(state);
+        invShiftRows(state);
         addRoundKey(state, expandedKey, 0);
         for (int i = 0; i < tmp.length; i++)
             tmp[i] = state[i / 4][i%4];
@@ -96,7 +97,7 @@ public class AESAlgorithm {
     }
 
 
-    public byte[][] subBytes(byte[][] state) {
+    public void subBytes(byte[][] state) {
         byte[][] tmp = new byte[Nb][Nb];
         for (int row = 0; row < Nb; row++) {
             for (int col = 0; col < Nb; col++) {
@@ -106,10 +107,9 @@ public class AESAlgorithm {
                 tmp[row][col] = (byte) SBox.getSBox(row_sbox, col_sbox);
             }
         }
-        return tmp;
     }
 
-    public byte[][] shiftRows(byte[][] state) {
+    public void shiftRows(byte[][] state) {
         byte tmp;
 
         // Shift row 1 by 1
@@ -134,10 +134,9 @@ public class AESAlgorithm {
         state[3][1] = state[3][0];
         state[3][0] = tmp;
 
-        return state; // ??? albo void?
     }
 
-    public byte[][] mixColumns(byte[][] state) {
+    public void mixColumns(byte[][] state) {
         for (int i = 0; i < Nb; i++) {
             byte c0 = state[0][i];
             byte c1 = state[1][i];
@@ -152,7 +151,6 @@ public class AESAlgorithm {
             state[3][i] = (byte) (mul(0x03, c0) ^ c1 ^ c2 ^ mul(0x02, c3));
         }
 
-        return state;
     }
 
     private byte mul(int a, byte b) {
@@ -181,7 +179,7 @@ public class AESAlgorithm {
 
     // Evil versions of methods above be like
 
-    public byte[][] invSubBytes(byte[][] state) {
+    public void invSubBytes(byte[][] state) {
         byte[][] tmp = new byte[Nb][Nb];
         for (int row = 0; row < Nb; row++) {
             for (int col = 0; col < Nb; col++) {
@@ -191,10 +189,9 @@ public class AESAlgorithm {
                 tmp[row][col] = (byte) SBox.getInvertedSBox(row_sbox, col_sbox);
             }
         }
-        return tmp;
     }
 
-    public byte[][] invShiftRows(byte[][] state) {
+    public void invShiftRows(byte[][] state) {
         byte tmp;
 
         // Shift row 1 by 3
@@ -218,10 +215,8 @@ public class AESAlgorithm {
         state[3][1] = state[3][2];
         state[3][2] = state[3][3];
         state[3][3] = tmp;
-
-        return state;
     }
-    public byte[][] invMixColumns(byte[][] state) {  // autor - chat gpt xd
+    public void invMixColumns(byte[][] state) {  // autor - chat gpt xd
         for (int i = 0; i < Nb; i++) {
             byte c0 = state[0][i];
             byte c1 = state[1][i];
@@ -237,8 +232,6 @@ public class AESAlgorithm {
             state[2][i] = (byte) (mul(0x0D, c0) ^ mul(0x09, c1) ^ mul(0x0E, c2) ^ mul(0x0B, c3));
             state[3][i] = (byte) (mul(0x0B, c0) ^ mul(0x0D, c1) ^ mul(0x09, c2) ^ mul(0x0E, c3));
         }
-
-        return state;
     }
 
     public byte[][] byteArrayToState(byte[] byteArray) { // z 1D do 2D tablicy
