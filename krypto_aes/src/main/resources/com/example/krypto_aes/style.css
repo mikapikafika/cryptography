@@ -4,9 +4,17 @@
 }
 
 #instructionBg {
-    -fx-background-color: red;
+    -fx-background-color: white;
 }
 
 #keyPane {
+    -fx-background-color: white;
+}
+
+#encodePane {
+    -fx-background-color: white;
+}
+
+#decodePane {
     -fx-background-color: white;
 }

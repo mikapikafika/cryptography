@@ -17,7 +17,7 @@ public class SceneController {
     @FXML
     private Button buttonDES;
     @FXML
-    public void switchToAES(ActionEvent event) {
+    public void switchToAES() {
         StageSetup.buildStage("aes-stage.fxml");
     }
 }
