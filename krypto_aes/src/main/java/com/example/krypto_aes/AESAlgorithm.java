@@ -8,7 +8,7 @@ public class AESAlgorithm {
     private final int Nb = 4;
     private int Nk;  //number od 32-bit words Nk = 4, 6, 8
     private int Nr; // moze byc zmienne
-//    int[] expandedKey = new int[Nb * (Nr + 1)]; //expandKey(key, Nk, Nb, Nr, expandedKey);
+    //    int[] expandedKey = new int[Nb * (Nr + 1)]; //expandKey(key, Nk, Nb, Nr, expandedKey);
     int[] expandedKey;
     byte[] primaryKey;
 
@@ -36,6 +36,71 @@ public class AESAlgorithm {
         this.expandedKey = expandedKey;
     }
 
+    public byte[] encode(byte[] message) {
+        // jakims wyjatkiem rzucic jak message == 0
+
+        int nrOfFullBlocks = message.length / 16;
+        if (message.length % 16 != 0) {
+            nrOfFullBlocks++;   //zwiekszam o jeden
+        }
+        if (nrOfFullBlocks == 0) {
+            nrOfFullBlocks++;
+        }
+        int length = nrOfFullBlocks * 16;
+        byte[] tmp = new byte[length];
+        byte[] result = new byte[length];
+        byte[] block = new byte[16];
+        // klucz oczywiscie musi byc ustawiony bo inaczej lipka
+        for (int i = 0; i < length; i++) {
+            if (i < message.length) {
+                tmp[i] = message[i];
+            } else {
+                tmp[i] = 0;
+            }
+        }
+        for (int i = 0; i < length; i += 16) {
+            for (int j = 0; j < 16; j++) {
+                block[j] = tmp[i + j];
+            }
+            block = encrypt(block);
+            for (int j = 0; j < 16; j++) {
+                result[i + j] = block[j];
+            }
+        }
+
+        return result;
+    }
+
+    public byte[] decode(byte[] message) {
+        byte[] result = new byte[message.length];
+        byte[] block = new byte[16];
+        for (int i = 0; i < message.length; i += 16) {
+            for (int j = 0; j < 16; j++) {
+                block[j] = message[i + j];
+            }
+            block = decrypt(block);
+
+            for (int j = 0; j < 16; j++) {
+                result[i + j] = block[j];
+            }
+        }
+        int toCut = 0;
+        for (int i = result.length - 1; i >= 0; i--) {
+            if (result[i] != 0) {
+                break;
+            }
+            toCut++;
+        }
+        if (toCut > 0) {
+            byte[] tmp = new byte[result.length - toCut];
+            System.arraycopy(result, 0, tmp, 0, tmp.length);
+            result = tmp;
+        }
+
+        return result;
+    }
+
+
     public byte[] encrypt(byte[] in) {
         byte[] tmp = new byte[in.length];
         byte[][] state = new byte[Nb][Nb];
@@ -53,7 +118,7 @@ public class AESAlgorithm {
         shiftRows(state);
         addRoundKey(state, expandedKey, Nr);
         for (int i = 0; i < tmp.length; i++)
-            tmp[i] = state[i / 4][i%4];
+            tmp[i] = state[i / 4][i % 4];
         return tmp;
     }
 
@@ -64,7 +129,7 @@ public class AESAlgorithm {
             state[i / 4][i % 4] = in[i];
         }
         addRoundKey(state, expandedKey, Nr);
-        for (int i = Nr - 1 ; i >= 1; i--) {
+        for (int i = Nr - 1; i >= 1; i--) {
             invSubBytes(state);
             invShiftRows(state);
             addRoundKey(state, expandedKey, i);
@@ -75,9 +140,10 @@ public class AESAlgorithm {
         invShiftRows(state);
         addRoundKey(state, expandedKey, 0);
         for (int i = 0; i < tmp.length; i++)
-            tmp[i] = state[i / 4][i%4];
+            tmp[i] = state[i / 4][i % 4];
         return tmp;
     }
+
     private byte[] splitIntToFourBytes(int intValue) {
         byte[] result = new byte[Nb];
         result[0] = (byte) ((intValue >> 24) & 0xFF);
@@ -86,6 +152,7 @@ public class AESAlgorithm {
         result[3] = (byte) (intValue & 0xFF);
         return result;
     }
+
     private void addRoundKey(byte[][] state, int[] expandedKey, int round) { // na referencji po prostu operuje
         int start = Nb * round;                                              // zawsze mozna to zmienic
         for (int i = 0; i < Nb; i++) {
@@ -216,6 +283,7 @@ public class AESAlgorithm {
         state[3][2] = state[3][3];
         state[3][3] = tmp;
     }
+
     public void invMixColumns(byte[][] state) {  // autor - chat gpt xd
         for (int i = 0; i < Nb; i++) {
             byte c0 = state[0][i];

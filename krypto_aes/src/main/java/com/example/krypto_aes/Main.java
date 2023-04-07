@@ -47,17 +47,32 @@ public class Main {
                     System.out.println("after decryption");
                     print1DArray(afterDecrypting);
 
+
+                    byte[] afterEncode = algorithm.encode(blok);
+                    System.out.println("after encoding");
+                    print1DArray(afterEncode);
+
+                    byte[] afterDecode = algorithm.decode(afterEncode);
+                    System.out.println("after decoding");
+                    print1DArray(afterDecode);
+
+
+                    String string2 = "rowerrowerrowerrr";
+                    System.out.println(string2);
+                    byte[] blok2 = string2.getBytes();
+
+                    byte[] afterEncode2 = algorithm.encode(blok2);
+                    String str = new String(afterEncode2);
+                    System.out.println(str);
+
+                    byte[] afterDecode2 = algorithm.decode(afterEncode2);
+                    String str2 = new String(afterDecode2);
+                    System.out.println(str2);
                 }
                 case 2 -> {
                     // blyblyblyyyy
-                    KeyHandler keyHandler = new KeyHandler();
-                    try {
-                        byte[] array;
-                        array = keyHandler.generateKey(128);
-                        print1DArray(array);
-                    } catch (NoSuchAlgorithmException e) {
-                        throw new RuntimeException(e);
-                    }
+                    byte[] array = {(byte) 0x32, (byte) 0x43, (byte) 0xf6, (byte) 0xa8, 0, 0 };
+                    System.out.println(array.length);
                 }
                 case 3 -> {
 
@@ -113,7 +128,7 @@ public class Main {
     public static void print1DArray(byte[] arr) {
         for (int i = 0; i < arr.length; i += 4) {
             for (int j = i; j < i + 4 && j < arr.length; j++) {
-                System.out.print(arr[j] & 0xff);
+                System.out.print(arr[j]  & 0xff);
                 System.out.print(" ");
             }
             System.out.println();
