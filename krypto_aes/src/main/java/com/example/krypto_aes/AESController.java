@@ -42,6 +42,7 @@ public class AESController {
     private FileChooser fileChooser = new FileChooser();
     private byte[] message;
 
+
     @FXML
     public void pressedBack() {
         StageSetup.buildStage("main-stage.fxml");
@@ -92,6 +93,7 @@ public class AESController {
 
     @FXML
     public void pressedEncode() {
+        message = toEncodeArea.getText().getBytes();
         algorithm.encode(message);
     }
 
@@ -123,13 +125,14 @@ public class AESController {
 
     @FXML
     public void pressedDecode() {
+        message = toDecodeArea.getText().getBytes();
         algorithm.decode(message);
     }
 
     @FXML
     public void pressedSaveData() throws IOException {
         String displayMessage = new String(message);
-        encodedArea.setText(displayMessage);
+        decodedArea.setText(displayMessage);
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text files", "*.txt"));
         File file = fileChooser.showSaveDialog(null);
         if (file != null) {
