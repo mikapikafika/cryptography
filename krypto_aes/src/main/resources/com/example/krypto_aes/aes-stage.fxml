@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 
 <AnchorPane prefHeight="721.0" prefWidth="860.0" styleClass="backgroundColor" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.krypto_aes.AesStage">
    <children>
-      <HBox layoutX="30.0" layoutY="32.0" prefHeight="173.0" prefWidth="803.0" style="-fx-border-width: 3;" styleClass="hbox" stylesheets="@style.css" />
+      <Button layoutX="147.0" layoutY="132.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="206.0" text="gg" />
    </children>
 </AnchorPane>
