@@ -1,3 +1,12 @@
 .backgroundColor{
-    -fx-background-color: linear-gradient(to right,#61D8DE, #E839F6);
+    -fx-background-color: linear-gradient(to right,#99FEFF, #94DAFF, #b1a6fc, #B983FF);
+    /*-fx-background-color: linear-gradient(#B983FF, #94B3FD, #94DAFF, #99FEFF);*/
+}
+
+#instructionBg {
+    -fx-background-color: red;
+}
+
+#keyPane {
+    -fx-background-color: white;
 }
