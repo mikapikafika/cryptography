@@ -12,6 +12,10 @@ public class AESAlgorithm {
     int[] expandedKey;
     byte[] primaryKey;
 
+    public byte[] getPrimaryKey() {
+        return primaryKey;
+    }
+
     public void setPrimaryKey(byte[] primaryKey) {
         this.primaryKey = primaryKey;
         int keySize = primaryKey.length * 8;

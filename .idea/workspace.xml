@@ -5,14 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9da297fd-f4d5-494f-b495-0b4ef88f84a4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/discord.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/discord.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/krypto_aes/src/main/java/com/example/krypto_aes/AESAlgorithm.java" beforeDir="false" afterPath="$PROJECT_DIR$/krypto_aes/src/main/java/com/example/krypto_aes/AESAlgorithm.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/krypto_aes/src/main/java/com/example/krypto_aes/AESController.java" beforeDir="false" afterPath="$PROJECT_DIR$/krypto_aes/src/main/java/com/example/krypto_aes/AESController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/krypto_aes/src/main/java/com/example/krypto_aes/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/krypto_aes/src/main/java/com/example/krypto_aes/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/krypto_aes/src/main/java/com/example/krypto_aes/SceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/krypto_aes/src/main/java/com/example/krypto_aes/SceneController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/krypto_aes/src/main/resources/com/example/krypto_aes/aes-stage.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/krypto_aes/src/main/resources/com/example/krypto_aes/aes-stage.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/krypto_aes/src/main/resources/com/example/krypto_aes/main-stage.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/krypto_aes/src/main/resources/com/example/krypto_aes/main-stage.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/krypto_aes/src/main/resources/com/example/krypto_aes/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/krypto_aes/src/main/resources/com/example/krypto_aes/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,6 +81,7 @@
       <workItem from="1680862256043" duration="3767000" />
       <workItem from="1680871561953" duration="6219000" />
       <workItem from="1680877792523" duration="9661000" />
+      <workItem from="1680896074911" duration="753000" />
     </task>
     <servers />
   </component>

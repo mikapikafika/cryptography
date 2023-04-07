@@ -29,8 +29,12 @@ public class AESController {
     private AnchorPane encodePane;
     @FXML
     private TextArea toEncodeArea;
-
-
+    @FXML
+    private TextArea encodedArea;
+    @FXML
+    private TextArea toDecodeArea;
+    @FXML
+    private TextArea decodedArea;
 
 
     private AESAlgorithm algorithm = new AESAlgorithm();
@@ -45,8 +49,8 @@ public class AESController {
 
     @FXML
     public void pressedGenerateKey() throws NoSuchAlgorithmException {
-        algorithm.primaryKey = keyHandler.generateKey(128);
-        String displayKey = bytesToHex(algorithm.primaryKey);
+        algorithm.setPrimaryKey(keyHandler.generateKey(128));
+        String displayKey = bytesToHex(algorithm.getPrimaryKey());
         generateKeyField.setText(displayKey);
     }
 
@@ -57,7 +61,7 @@ public class AESController {
         if (file != null) {
             String displayKey = Arrays.toString(Files.readAllBytes(file.toPath()));
             readKeyField.setText(displayKey);
-            algorithm.primaryKey = HexFormat.of().parseHex(displayKey);
+            algorithm.setPrimaryKey(HexFormat.of().parseHex(displayKey));
         }
     }
 
@@ -73,6 +77,8 @@ public class AESController {
         }
     }
 
+    // SZYFROWANIE
+
     @FXML
     public void pressedReadData() throws IOException {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text files", "*.txt"));
@@ -86,12 +92,51 @@ public class AESController {
 
     @FXML
     public void pressedEncode() {
-
+        algorithm.encode(message);
     }
 
     @FXML
     public void pressedSaveCryptogram() throws IOException {
+        String displayMessage = new String(message);
+        encodedArea.setText(displayMessage);
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text files", "*.txt"));
+        File file = fileChooser.showSaveDialog(null);
+        if (file != null) {
+            FileWriter writer = new FileWriter(file);
+            writer.write(displayMessage);
+            writer.close();
+        }
+    }
 
+    // DESZYFROWANIE
+
+    @FXML
+    public void pressedReadCryptogram() throws IOException {
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text files", "*.txt"));
+        File file = fileChooser.showOpenDialog(null);
+        if (file != null) {
+            message = Files.readAllBytes(file.toPath());
+            String displayMessage = new String(message);
+            toDecodeArea.setText(displayMessage);
+        }
+    }
+
+    @FXML
+    public void pressedDecode() {
+        algorithm.decode(message);
+    }
+
+    @FXML
+    public void pressedSaveData() throws IOException {
+        String displayMessage = new String(message);
+        encodedArea.setText(displayMessage);
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text files", "*.txt"));
+        File file = fileChooser.showSaveDialog(null);
+        if (file != null) {
+            FileWriter writer = new FileWriter(file);
+            writer.write(displayMessage);
+            writer.close();
+        }
     }
 
     private static String bytesToHex(byte[] bytes) {

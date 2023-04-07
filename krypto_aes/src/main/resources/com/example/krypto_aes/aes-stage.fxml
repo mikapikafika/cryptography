@@ -130,7 +130,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
-                        <TextArea layoutX="49.0" layoutY="304.0" prefHeight="150.0" prefWidth="443.0">
+                        <TextArea fx:id="encodedArea" layoutX="49.0" layoutY="304.0" prefHeight="150.0" prefWidth="443.0">
                            <cursor>
                               <Cursor fx:constant="TEXT" />
                            </cursor>
@@ -150,7 +150,7 @@
                                     <Font name="Consolas" size="16.0" />
                                  </font>
                               </Label>
-                              <Button alignment="CENTER" contentDisplay="CENTER" maxWidth="170.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="214.0" text="Wybierz plik">
+                              <Button alignment="CENTER" contentDisplay="CENTER" maxWidth="170.0" mnemonicParsing="false" onAction="#pressedReadCryptogram" prefHeight="35.0" prefWidth="214.0" text="Wybierz plik">
                                  <font>
                                     <Font name="Consolas" size="14.0" />
                                  </font>
@@ -165,12 +165,12 @@
                               <Font name="Consolas" size="16.0" />
                            </font>
                         </Label>
-                        <TextArea layoutX="50.0" layoutY="94.0" prefHeight="150.0" prefWidth="443.0">
+                        <TextArea fx:id="toDecodeArea" layoutX="50.0" layoutY="94.0" prefHeight="150.0" prefWidth="443.0">
                            <cursor>
                               <Cursor fx:constant="TEXT" />
                            </cursor>
                         </TextArea>
-                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="201.0" layoutY="257.0" maxWidth="180.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="139.0" text="Deszyfruj">
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="201.0" layoutY="257.0" maxWidth="180.0" mnemonicParsing="false" onAction="#pressedDecode" prefHeight="35.0" prefWidth="139.0" text="Deszyfruj">
                            <font>
                               <Font name="Consolas" size="14.0" />
                            </font>
@@ -178,12 +178,12 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
-                        <TextArea layoutX="49.0" layoutY="304.0" prefHeight="150.0" prefWidth="443.0">
+                        <TextArea fx:id="decodedArea" layoutX="49.0" layoutY="304.0" prefHeight="150.0" prefWidth="443.0">
                            <cursor>
                               <Cursor fx:constant="TEXT" />
                            </cursor>
                         </TextArea>
-                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="187.0" layoutY="466.0" maxWidth="180.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="168.0" text="Zapisz dane">
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="187.0" layoutY="466.0" maxWidth="180.0" mnemonicParsing="false" onAction="#pressedSaveData" prefHeight="42.0" prefWidth="168.0" text="Zapisz dane">
                            <font>
                               <Font name="Consolas" size="14.0" />
                            </font>
