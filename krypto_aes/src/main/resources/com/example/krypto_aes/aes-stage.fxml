@@ -1,10 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="721.0" prefWidth="860.0" styleClass="backgroundColor" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.krypto_aes.AesStage">
+<AnchorPane prefHeight="564.0" prefWidth="589.0" styleClass="backgroundColor" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.krypto_aes.AESController">
    <children>
-      <Button layoutX="147.0" layoutY="132.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="206.0" text="gg" />
+      <Pane fx:id="keyPane" layoutX="25.0" layoutY="23.0" prefHeight="198.0" prefWidth="540.0">
+         <children>
+            <Label fx:id="keyLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="139.0" layoutY="14.0" prefHeight="31.0" prefWidth="247.0" text="KLUCZ">
+               <font>
+                  <Font name="Berlin Sans FB" size="30.0" />
+               </font>
+            </Label>
+            <ButtonBar layoutX="64.0" layoutY="51.0" prefHeight="35.0" prefWidth="396.0">
+              <buttons>
+                <Button fx:id="generateKeyButton" maxWidth="200.0" mnemonicParsing="false" onAction="#onActionGenerateKey" prefHeight="26.0" text="Wygeneruj">
+                     <font>
+                        <Font name="Berlin Sans FB" size="12.0" />
+                     </font>
+                  </Button>
+                  <TextField fx:id="generateKeyField" prefHeight="25.0" prefWidth="390.0" />
+              </buttons>
+            </ButtonBar>
+            <ButtonBar layoutX="5.0" layoutY="96.0" prefHeight="35.0" prefWidth="509.0">
+               <buttons>
+                  <Label fx:id="readKeyLabel" alignment="CENTER" maxWidth="131.0" prefHeight="18.0" text="Wczytaj klucz z pliku" textAlignment="CENTER">
+                     <font>
+                        <Font name="Berlin Sans FB" size="12.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="readKeyField" prefHeight="25.0" prefWidth="253.0" />
+                  <Button fx:id="readKeyButton" maxWidth="10.0" mnemonicParsing="false" onAction="#onActionReadKey" prefHeight="26.0" text="Wczytaj">
+                     <font>
+                        <Font name="Berlin Sans FB" size="12.0" />
+                     </font>
+                  </Button>
+               </buttons>
+            </ButtonBar>
+            <ButtonBar layoutX="5.0" layoutY="140.0" prefHeight="35.0" prefWidth="509.0">
+               <buttons>
+                  <Label alignment="CENTER" maxWidth="131.0" prefHeight="18.0" text="Zapisz klucz do pliku" textAlignment="CENTER">
+                     <font>
+                        <Font name="Berlin Sans FB" size="12.0" />
+                     </font>
+                  </Label>
+                  <TextField prefHeight="25.0" prefWidth="253.0" />
+                  <Button maxWidth="10.0" mnemonicParsing="false" onAction="#onActionSaveKey" prefHeight="26.0" text="Zapisz">
+                     <font>
+                        <Font name="Berlin Sans FB" size="12.0" />
+                     </font>
+                  </Button>
+               </buttons>
+            </ButtonBar>
+         </children>
+      </Pane>
    </children>
 </AnchorPane>
