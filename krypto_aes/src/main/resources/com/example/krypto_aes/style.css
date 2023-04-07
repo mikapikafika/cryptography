@@ -1,9 +1,3 @@
 .backgroundColor{
     -fx-background-color: linear-gradient(to right,#61D8DE, #E839F6);
 }
-
-.hbox {
-    -fx-background-color: linear-gradient(to right,#61D8DE, #E839F6);
-    -fx-border-color: black;
-    -fx-border-width: 5px;
-}
