@@ -5,12 +5,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HexFormat;
+import static com.example.krypto_aes.KeyHandler.*;
 
 public class AESController {
 
@@ -95,6 +95,7 @@ public class AESController {
     public void pressedEncode() {
         message = toEncodeArea.getText().getBytes();
         algorithm.encode(message);
+        algorithm.encrypt(message);
     }
 
     @FXML
