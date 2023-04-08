@@ -10,7 +10,6 @@ import java.nio.file.Files;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HexFormat;
-import static com.example.krypto_aes.KeyHandler.*;
 
 public class AESController {
 
@@ -41,6 +40,9 @@ public class AESController {
     private KeyHandler keyHandler = new KeyHandler();
     private FileChooser fileChooser = new FileChooser();
     private byte[] message;
+    private byte[] result;
+    private byte[] primaryKey;
+    private int[] expandedKey = new int[4 * (10 + 1)];
 
 
     @FXML
@@ -50,9 +52,12 @@ public class AESController {
 
     @FXML
     public void pressedGenerateKey() throws NoSuchAlgorithmException {
-        algorithm.setPrimaryKey(keyHandler.generateKey(128));
-        keyHandler.expandKey(algorithm.getPrimaryKey(), 4, 4, 10, algorithm.getExpandedKey());
-        algorithm.setExpandedKey(algorithm.getExpandedKey());
+        primaryKey = keyHandler.generateKey(128);
+        keyHandler.expandKey(primaryKey, 4, 4, 10, expandedKey);
+        algorithm.setPrimaryKey(primaryKey);
+        algorithm.setExpandedKey(expandedKey);
+
+
         String displayKey = bytesToHex(algorithm.getPrimaryKey());
         generateKeyField.setText(displayKey);
     }
@@ -96,19 +101,20 @@ public class AESController {
     @FXML
     public void pressedEncode() {
         message = toEncodeArea.getText().getBytes();
-        algorithm.encode(message);
-        algorithm.encrypt(message);
+        message = algorithm.encode(message);
+        result = algorithm.encrypt(message);
+
+        String displayMessage = new String(result);
+        encodedArea.setText(displayMessage);
     }
 
     @FXML
     public void pressedSaveCryptogram() throws IOException {
-        String displayMessage = new String(message);
-        encodedArea.setText(displayMessage);
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text files", "*.txt"));
         File file = fileChooser.showSaveDialog(null);
         if (file != null) {
             FileWriter writer = new FileWriter(file);
-            writer.write(displayMessage);
+            writer.write(Arrays.toString(result));
             writer.close();
         }
     }
@@ -129,18 +135,20 @@ public class AESController {
     @FXML
     public void pressedDecode() {
         message = toDecodeArea.getText().getBytes();
-        algorithm.decode(message);
+        message = algorithm.decrypt(message);
+        result = algorithm.decode(message);
+
+        String displayMessage = new String(result);
+        decodedArea.setText(displayMessage);
     }
 
     @FXML
     public void pressedSaveData() throws IOException {
-        String displayMessage = new String(message);
-        decodedArea.setText(displayMessage);
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text files", "*.txt"));
         File file = fileChooser.showSaveDialog(null);
         if (file != null) {
             FileWriter writer = new FileWriter(file);
-            writer.write(displayMessage);
+            writer.write(Arrays.toString(result));
             writer.close();
         }
     }
