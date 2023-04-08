@@ -34,7 +34,7 @@ public class KeyHandler {
      * @param Nr No. of rounds - 10, 12 or 14
      * @param word array to store the rest of the expanded key
      */
-    public int[] expandKey(byte[] key, int Nk, int Nb, int Nr, int[] word) {
+    public void expandKey(byte[] key, int Nk, int Nb, int Nr, int[] word) {
         int i = 0;
         while (i < Nk) {
             word[i] = (key[4 * i] << 24) | ((key[4 * i + 1] & 0xff) << 16) | ((key[4 * i + 2] & 0xff) << 8) | (key[4 * i + 3] & 0xff);
@@ -54,8 +54,6 @@ public class KeyHandler {
             word[i] = word[i - Nk] ^ temp;
             i++;
         }
-
-        return word;
     }
 
     // DO WYWALENIA POTEM XD

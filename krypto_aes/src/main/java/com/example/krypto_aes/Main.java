@@ -30,51 +30,51 @@ public class Main {
                     print1DArray(blok);
                     KeyHandler keyHandler = new KeyHandler();
                     AESAlgorithm algorithm = new AESAlgorithm();
-//                    try {
-//                        byte[] primaryKey = keyHandler.generateKey(128);
-//                        int[] expandedKey = new int[4 * (10 + 1)]; //tak z dupy to na razie jest xddd
-//                        keyHandler.expandKey(primaryKey, 4, 4, 10, expandedKey);
-//                        algorithm.setPrimaryKey(primaryKey);
-//                        algorithm.setExpandedKey(expandedKey);
-//                    } catch (NoSuchAlgorithmException e) {
-//                        throw new RuntimeException(e);
-//                    }
+                    try {
+                        byte[] primaryKey = keyHandler.generateKey(128);
+                        int[] expandedKey = new int[4 * (10 + 1)]; //tak z dupy to na razie jest xddd
+                        keyHandler.expandKey(primaryKey, 4, 4, 10, expandedKey);
+                        algorithm.setPrimaryKey(primaryKey);
+                        algorithm.setExpandedKey(expandedKey);
+                    } catch (NoSuchAlgorithmException e) {
+                        throw new RuntimeException(e);
+                    }
 
-//                    byte[] afterEncrypting = algorithm.encrypt(blok);
-//                    System.out.println("after encryption");
-//                    print1DArray(afterEncrypting);
-//                    byte[] afterDecrypting = algorithm.decrypt(afterEncrypting);
-//                    System.out.println("after decryption");
-//                    print1DArray(afterDecrypting);
-//
-//
-//                    byte[] afterEncode = algorithm.encode(blok);
-//                    System.out.println("after encoding");
-//                    print1DArray(afterEncode);
-//
-//                    byte[] afterDecode = algorithm.decode(afterEncode);
-//                    System.out.println("after decoding");
-//                    print1DArray(afterDecode);
-//
-//
-//                    String string2 = "rowerrowerrowerrr";
-//                    System.out.println(string2);
-//                    byte[] blok2 = string2.getBytes();
-//
-//                    byte[] afterEncode2 = algorithm.encode(blok2);
-//                    String str = new String(afterEncode2);
-//                    System.out.println(str);
-//
-//                    byte[] afterDecode2 = algorithm.decode(afterEncode2);
-//                    String str2 = new String(afterDecode2);
-//                    System.out.println(str2);
-//                }
-//                case 2 -> {
-//                    String string = "tekst tekst";
-//                    byte[] mess = string.getBytes();
-//                    AESAlgorithm algorithm = new AESAlgorithm();
-//                    byte[] blok = algorithm.encode(mess);
-//                    algorithm.encrypt(blok);
+                    byte[] afterEncrypting = algorithm.encrypt(blok);
+                    System.out.println("after encryption");
+                    print1DArray(afterEncrypting);
+                    byte[] afterDecrypting = algorithm.decrypt(afterEncrypting);
+                    System.out.println("after decryption");
+                    print1DArray(afterDecrypting);
+
+
+                    byte[] afterEncode = algorithm.encode(blok);
+                    System.out.println("after encoding");
+                    print1DArray(afterEncode);
+
+                    byte[] afterDecode = algorithm.decode(afterEncode);
+                    System.out.println("after decoding");
+                    print1DArray(afterDecode);
+
+
+                    String string2 = "rowerrowerrowerrr";
+                    System.out.println(string2);
+                    byte[] blok2 = string2.getBytes();
+
+                    byte[] afterEncode2 = algorithm.encode(blok2);
+                    String str = new String(afterEncode2);
+                    System.out.println(str);
+
+                    byte[] afterDecode2 = algorithm.decode(afterEncode2);
+                    String str2 = new String(afterDecode2);
+                    System.out.println(str2);
+                }
+                case 2 -> {
+                    String string = "tekst tekst";
+                    byte[] mess = string.getBytes();
+                    AESAlgorithm algorithm = new AESAlgorithm();
+                    byte[] blok = algorithm.encode(mess);
+                    algorithm.encrypt(blok);
                 }
                 case 3 -> {
 

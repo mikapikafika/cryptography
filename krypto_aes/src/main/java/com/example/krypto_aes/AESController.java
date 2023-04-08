@@ -51,6 +51,8 @@ public class AESController {
     @FXML
     public void pressedGenerateKey() throws NoSuchAlgorithmException {
         algorithm.setPrimaryKey(keyHandler.generateKey(128));
+        keyHandler.expandKey(algorithm.getPrimaryKey(), 4, 4, 10, algorithm.getExpandedKey());
+        algorithm.setExpandedKey(algorithm.getExpandedKey());
         String displayKey = bytesToHex(algorithm.getPrimaryKey());
         generateKeyField.setText(displayKey);
     }
