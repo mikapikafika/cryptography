@@ -1,0 +1,7 @@
+.backgroundColor {
+    -fx-background-color: linear-gradient(to right,#99FEFF, #94DAFF, #b1a6fc, #B983FF);
+}
+
+#instructionBg, #keyPane, #encodePane, #decodePane {
+    -fx-background-color: rgba(255,255,255,0.7);
+}

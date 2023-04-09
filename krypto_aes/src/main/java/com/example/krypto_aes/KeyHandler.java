@@ -1,80 +1,118 @@
 package com.example.krypto_aes;
 
 import javax.crypto.*;
-import javax.crypto.spec.*;
 import java.security.*;
 
 public class KeyHandler {
 
-    public static byte[] generateCipherKey(int Nk) throws NoSuchAlgorithmException {
-        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
-        keyGenerator.init(Nk * 32);         // Nk = 4, 6 lub 8
-        SecretKey key = keyGenerator.generateKey();
-        return key.getEncoded();
+    private static final int[] rCon = {
+            0x01000000, 0x02000000, 0x04000000, 0x08000000,
+            0x10000000, 0x20000000, 0x40000000, 0x80000000,
+            0x1B000000, 0x36000000, 0x6C000000, 0xD8000000,
+            0xAB000000, 0x4D000000, 0x9A000000, 0x2F000000
+    };
+
+    /**
+     * Generates a key for AES using KeyGenerator, SecretRandom + SecretKey
+     * @param keyLength 128, 192 or 256
+     * @return generated key
+     * @throws NoSuchAlgorithmException
+     */
+    public byte[] generateKey(int keyLength) throws NoSuchAlgorithmException {
+        KeyGenerator key = KeyGenerator.getInstance("AES");
+        SecureRandom random = new SecureRandom();
+        key.init(keyLength,random);
+        SecretKey secretKey = key.generateKey();
+        return secretKey.getEncoded();
     }
 
-    // Initialization Vector - chyba potrzebny
-    public static IvParameterSpec generateIv(SecretKey key) {
-        byte[] iv = new byte[key.getEncoded().length];
-        new SecureRandom().nextBytes(iv);
-        return new IvParameterSpec(iv);
+    /**
+     * Expands the kay
+     * @param key to expand
+     * @param Nk No. of 32-bit words in the key - 4, 6 or 8
+     * @param Nb No. of columns in state - 4
+     * @param Nr No. of rounds - 10, 12 or 14
+     * @param word array to store the rest of the expanded key
+     */
+    public void expandKey(byte[] key, int Nk, int Nb, int Nr, int[] word) {
+        int i = 0;
+        while (i < Nk) {
+            word[i] = (key[4 * i] << 24) | ((key[4 * i + 1] & 0xff) << 16) | ((key[4 * i + 2] & 0xff) << 8) | (key[4 * i + 3] & 0xff);
+            i++;
+        }
+
+        i = Nk;
+
+        while (i < Nb * (Nr + 1)) {
+            int temp = word[i - 1];
+
+            if (i % Nk == 0) {
+                temp = subWord(rotWord(temp)) ^ rCon[(i - 1) / Nk];
+            } else if (Nk > 6 && i % Nk == 4) {
+                temp = subWord(temp);
+            }
+            word[i] = word[i - Nk] ^ temp;
+            i++;
+        }
     }
 
-//    public static SecretKey expandKey(SecretKey key, IvParameterSpec iv) {
-//        int keySize = key.getEncoded().length * 8;
-//        int numRounds = 0;
-//        switch(keySize) {
-//            case 128:
-//                numRounds = 10;
-//                break;
-//            case 192:
-//                numRounds = 12;
-//                break;
-//            case 256:
-//                numRounds = 14;
-//                break;
-//            default:
-//                throw new IllegalArgumentException("Invalid key size: " + keySize);
-//        }
-//
-//        byte[] expandedKey = new byte[numRounds * 16];
-//        byte[] temp = new byte[4];
-//        System.arraycopy(key.getEncoded(), 0, expandedKey, 0, key.getEncoded().length);
-//
-//        // TO CHYBA POWINNO BYĆ W JAKIEJŚ PĘTLI
-//
-//        // Przepisanie 4 ostatnich bajtów aktualnego rozszerzonego klucza do tymczasowego wektora 4-bajtowego.
-//        for (int i = key.getEncoded().length; i < expandedKey.length; i += 4) {
-//            System.arraycopy(expandedKey, i - 4, temp, 0, 4);
-//        }
-//
-//        // Wykonanie rotacji bajtów w wektorze o jedną pozycję w lewo. Skrajnie lewy bajt należy przepisać na skrajnie prawą pozycję.
-//        byte rotate = temp[0];
-//        temp[0] = temp[1];
-//        temp[1] = temp[2];
-//        temp[2] = temp[3];
-//        temp[3] = rotate;
-//
-//        // Zastąpienie każdego bajtu w wektorze innym bajtem, bazując na S-Box'ach.
-//        for (int i = 0; i < 4; i++) {
-//            int intFromByte = temp[i];
-//            if (intFromByte < 0) {          // if it's below 0 add 256 to make it positive
-//                intFromByte += 4;
-//            }
-//            temp[i] = (byte) SBox.getSBox(intFromByte / 16, intFromByte % 16);
-//        }
-//
-//        // Operacja Rcon: zsumowanie XOR najbardziej lewego bajtu w wektorze z dwójką podniesioną do potęgi (numer aktualnej iteracji - 1).
-//
-//
-//
-//        // Zsumowanie XOR otrzymanego 4-bajtowego wektora z 4-bajtowym blokiem zaczynającym się n bajtów przed aktualnym
-//        // końcem klucza, a następnie dopisanie wyniku na koniec rozszerzanego klucza. W ten sposób otrzymuje się nowe 4 bajty rozszerzanego klucza.
-//
-//
-//
-//        return new SecretKeySpec(expandedKey, "AES");
-//    }
+    // DO WYWALENIA POTEM XD
+    public void expandKeyForTests(byte[] key, int Nk, int Nb, int Nr, int[] word) {
+        int i = 0;
+        while (i < Nk) {
+            word[i] = (key[4 * i] << 24) | ((key[4 * i + 1] & 0xff) << 16) | ((key[4 * i + 2] & 0xff) << 8) | (key[4 * i + 3] & 0xff);
+            i++;
+        }
 
+        i = Nk;
+
+        while (i < Nb * (Nr + 1)) {
+            int temp = word[i - 1];
+            System.out.printf("i = %d \t temp = %08x\n", i, temp);
+
+            if (i % Nk == 0) {
+                int rotWordResult = rotWord(temp);
+                int subWordResult = subWord(rotWordResult);
+                int rConResult = rCon[(i - 1) / Nk];
+                temp = subWordResult ^ rConResult;
+                System.out.printf("after rotWord = %08x \t after subWord = %08x \t rCon [i/Nk] = %08x\ntemp now = %08x\n", rotWordResult, subWordResult, rConResult, temp);
+            } else if (Nk > 6 && i % Nk == 4) {
+                temp = subWord(temp);
+                System.out.printf("temp after only subWord = %08x\n", temp);
+            }
+            int wordNk = word[i - Nk];
+            word[i] = word[i - Nk] ^ temp;
+            System.out.printf("temp now = %08x\nword[i-Nk] = %08x \t word[i] after XOR = %08x\n\n\n", temp, wordNk, word[i]);
+            i++;
+        }
+
+        System.out.println("Expanded Key:");
+        for (int k = 0; k < Nb * (Nr + 1); k++) {
+            System.out.printf("w%d = %08x\n", k, word[k]);
+        }
+    }
+
+    /**
+     * Substitutes the bytes of a word with values from the sBox
+     * @param word word to be substituted
+     * @return result after substituting the bytes with sBox values
+     */
+    private int subWord(int word) {
+        int result = 0;
+        for (int i = 0; i < 4; i++) {
+            int intFromByte = (word >>> (8 * i)) & 0xff;
+            result = result | (SBox.getSBox(intFromByte / 16, intFromByte % 16) << (8 * i));
+        }
+        return result;
+    }
+
+    /**
+     * Rotates the bytes 1 byte to the left
+     * @param word word to be rotated
+     * @return rotated word
+     */
+    private int rotWord(int word) {
+        return (word << 8) | (word >>> 24);
+    }
 
 }
