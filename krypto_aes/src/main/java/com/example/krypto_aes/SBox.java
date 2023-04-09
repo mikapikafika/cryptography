@@ -37,42 +37,24 @@ public class SBox {
             0xa0, 0xe0, 0x3b, 0x4d, 0xae, 0x2a, 0xf5, 0xb0, 0xc8, 0xeb, 0xbb, 0x3c, 0x83, 0x53, 0x99, 0x61,
             0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d};
 
-    // Returns sBox of given coordinates
+    /**
+     * Returns sBox of given coordinates
+     * @param x x position
+     * @param y y position
+     * @return sBox value
+     */
     public static int getSBox(int x, int y) {
         return sBox[x * 16 + y];
     }
 
-//    public static int getSBox(int index) {
-//        return sBox[index];
-//    }
-
-    // Returns invertedSBox of given coordinates
+    /**
+     * Returns invertedSBox of given coordinates
+     * @param x x position
+     * @param y y position
+     * @return invertedSBox value
+     */
     public static int getInvertedSBox(int x, int y) {
         return invertedSBox[x * 16 + y];
     }
 
-    // 2D VARIANT
-//    /**
-//     * Extracts 2 lower bits and 2 higher bits of the byte
-//     * to look up a value in sBox using getSBox()
-//     * @param b byte, input
-//     * @return value from sBox
-//     */
-//    public static byte translateSBox(byte b) {
-//        int x = (b & 0b11110000) >> 4;
-//        int y = b & 0b00001111;
-//        return (byte) getSBox()[x][y];
-//    }
-//
-//    /**
-//     * Extracts 2 lower bits and 2 higher bits of the byte
-//     * to look up a value in inversedSBox using getInversedSBox()
-//     * @param b byte, input
-//     * @return value from inversedSBox
-//     */
-//    public static byte translateInversedSBox(byte b) {
-//        int x = (b & 0b11110000) >> 4;
-//        int y = b & 0b00001111;
-//        return (byte) getInversedSBox()[x][y];
-//    }
 }

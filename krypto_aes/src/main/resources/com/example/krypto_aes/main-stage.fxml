@@ -9,23 +9,35 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="458.0" prefWidth="608.0" styleClass="backgroundColor" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.krypto_aes.SceneController">
    <children>
-      <Button fx:id="buttonDES" layoutX="343.0" layoutY="262.0" mnemonicParsing="false" prefHeight="114.0" prefWidth="180.0" text="to drugie" />
-      <Button fx:id="buttonAES" layoutX="75.0" layoutY="262.0" mnemonicParsing="false" onAction="#switchToAES" prefHeight="114.0" prefWidth="180.0" text="Algorytm AES de-/szyfrujący dane" textAlignment="CENTER" wrapText="true">
+      <Button fx:id="buttonAES" alignment="CENTER" contentDisplay="CENTER" layoutX="84.0" layoutY="238.0" mnemonicParsing="false" onAction="#switchToAES" prefHeight="114.0" prefWidth="207.0" text="Algorytm AES de-/szyfrujący dane" textAlignment="CENTER" wrapText="true">
          <font>
-            <Font name="Consolas" size="14.0" />
+            <Font name="Consolas" size="16.0" />
          </font>
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Pane fx:id="instructionBg" layoutX="75.0" layoutY="48.0" prefHeight="163.0" prefWidth="448.0">
+      <Pane fx:id="instructionBg" layoutX="103.0" layoutY="59.0" prefHeight="133.0" prefWidth="402.0">
          <children>
-            <Label fx:id="instruction" contentDisplay="CENTER" layoutX="38.0" layoutY="50.0" prefHeight="64.0" prefWidth="389.0" text="WYBIERZ PROGRAM" textAlignment="CENTER">
+            <Label fx:id="instruction" alignment="CENTER" contentDisplay="CENTER" layoutX="7.0" layoutY="35.0" prefHeight="64.0" prefWidth="389.0" text="WYBIERZ PROGRAM" textAlignment="CENTER">
                <font>
-                  <Font name="Haettenschweiler" size="62.0" />
+                  <Font name="Consolas" size="38.0" />
                </font>
             </Label>
          </children>
       </Pane>
+      <Button fx:id="buttonAES1" alignment="CENTER" contentDisplay="CENTER" layoutX="321.0" layoutY="238.0" mnemonicParsing="false" onAction="#switchToAES" prefHeight="114.0" prefWidth="207.0" text="Algorytm DSA tworzący/weryfikujący podpis cyfrowy" textAlignment="CENTER" wrapText="true">
+         <font>
+            <Font name="Consolas" size="16.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Label layoutX="132.0" layoutY="408.0" text="Copyright © 2023 Michalina Wysocka i Wojciech Żyndul">
+         <font>
+            <Font name="Consolas" size="12.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

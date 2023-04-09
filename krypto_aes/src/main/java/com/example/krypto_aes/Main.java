@@ -14,8 +14,8 @@ public class Main {
         while (true) {
             System.out.println("What you want to do?");
             System.out.println("[1] - Encode a file");
-            System.out.println("[2] - Decode a file");
-            System.out.println("[3] - Exit the program");
+            System.out.println("[2] - Test GUI");
+            System.out.println("[3] - ??");
             System.out.println("[4] - Test the key :)");
             System.out.print("Enter a number: ");
 
@@ -70,9 +70,11 @@ public class Main {
                     System.out.println(str2);
                 }
                 case 2 -> {
-                    // blyblyblyyyy
-                    byte[] array = {(byte) 0x32, (byte) 0x43, (byte) 0xf6, (byte) 0xa8, 0, 0 };
-                    System.out.println(array.length);
+                    String string = "tekst tekst";
+                    byte[] mess = string.getBytes();
+                    AESAlgorithm algorithm = new AESAlgorithm();
+                    byte[] blok = algorithm.encode(mess);
+                    algorithm.encrypt(blok);
                 }
                 case 3 -> {
 

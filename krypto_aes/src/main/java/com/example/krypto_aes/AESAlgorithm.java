@@ -1,16 +1,29 @@
 package com.example.krypto_aes;
 
-import javax.crypto.SecretKey;
 
 public class AESAlgorithm {
-    //TODO metoda encode i decode juz na plikach, tekscie etc
-
     private final int Nb = 4;
-    private int Nk;  //number od 32-bit words Nk = 4, 6, 8
-    private int Nr; // moze byc zmienne
+    private int Nk;  // 4, 6 or 8
+    private int Nr; // 10, 12 or 14
     //    int[] expandedKey = new int[Nb * (Nr + 1)]; //expandKey(key, Nk, Nb, Nr, expandedKey);
-    int[] expandedKey;
-    byte[] primaryKey;
+    private int[] expandedKey = new int[Nb * (Nr + 1)];
+    private byte[] primaryKey;
+
+    public int getNb() {
+        return Nb;
+    }
+
+    public int getNk() {
+        return Nk;
+    }
+
+    public int getNr() {
+        return Nr;
+    }
+
+    public byte[] getPrimaryKey() {
+        return primaryKey;
+    }
 
     public void setPrimaryKey(byte[] primaryKey) {
         this.primaryKey = primaryKey;
@@ -32,25 +45,41 @@ public class AESAlgorithm {
         }
     }
 
+    public int[] getExpandedKey() {
+        return expandedKey;
+    }
+
     public void setExpandedKey(int[] expandedKey) {
         this.expandedKey = expandedKey;
     }
 
-    public byte[] encode(byte[] message) {
-        // jakims wyjatkiem rzucic jak message == 0
 
+    /**
+     * Encodes the message using a block cipher
+     * @param message to be encrypted
+     * @return encrypted message
+     * @throws IllegalArgumentException
+     */
+    public byte[] encode(byte[] message) throws IllegalArgumentException {
+        if (message == null || message.length == 0) {
+            throw new IllegalArgumentException("Message can't be empty.");
+        }
+
+        // calculating nr of full blocks
         int nrOfFullBlocks = message.length / 16;
         if (message.length % 16 != 0) {
-            nrOfFullBlocks++;   //zwiekszam o jeden
+            nrOfFullBlocks++;   // a partial block - adding 1 number to account for that
         }
         if (nrOfFullBlocks == 0) {
-            nrOfFullBlocks++;
+            nrOfFullBlocks++;   // nr of full blocks = 1
         }
+
         int length = nrOfFullBlocks * 16;
         byte[] tmp = new byte[length];
         byte[] result = new byte[length];
         byte[] block = new byte[16];
         // klucz oczywiscie musi byc ustawiony bo inaczej lipka
+        // copying message into tmp, adding bytes if needed
         for (int i = 0; i < length; i++) {
             if (i < message.length) {
                 tmp[i] = message[i];
@@ -58,6 +87,8 @@ public class AESAlgorithm {
                 tmp[i] = 0;
             }
         }
+
+        // encryption
         for (int i = 0; i < length; i += 16) {
             for (int j = 0; j < 16; j++) {
                 block[j] = tmp[i + j];
@@ -67,8 +98,39 @@ public class AESAlgorithm {
                 result[i + j] = block[j];
             }
         }
+//        for (int i = 0; i < length; i += 16) {
+//            System.arraycopy(tmp, i, block, 0, 16);
+//            block = encrypt(block);
+//            System.arraycopy(block, 0, result, i, 16);
+//        }
 
         return result;
+    }
+
+    /**
+     * Actual encryption process
+     * @param in input to be encrypted
+     * @return encrypted input
+     */
+    public byte[] encrypt(byte[] in) {
+        byte[] tmp = new byte[in.length];
+        byte[][] state = new byte[Nb][Nb];
+        for (int i = 0; i < in.length; i++) {
+            state[i / 4][i % 4] = in[i];
+        }
+        addRoundKey(state, getExpandedKey(), 0);
+        for (int i = 1; i < Nr; i++) {
+            subBytes(state);
+            shiftRows(state);
+            mixColumns(state);
+            addRoundKey(state, getExpandedKey(), i);
+        }
+        subBytes(state);
+        shiftRows(state);
+        addRoundKey(state, getExpandedKey(), Nr);
+        for (int i = 0; i < tmp.length; i++)
+            tmp[i] = state[i / 4][i % 4];
+        return tmp;
     }
 
     public byte[] decode(byte[] message) {
@@ -98,28 +160,6 @@ public class AESAlgorithm {
         }
 
         return result;
-    }
-
-
-    public byte[] encrypt(byte[] in) {
-        byte[] tmp = new byte[in.length];
-        byte[][] state = new byte[Nb][Nb];
-        for (int i = 0; i < in.length; i++) {
-            state[i / 4][i % 4] = in[i];
-        }
-        addRoundKey(state, expandedKey, 0);
-        for (int i = 1; i < Nr; i++) {
-            subBytes(state);
-            shiftRows(state);
-            mixColumns(state);
-            addRoundKey(state, expandedKey, i);
-        }
-        subBytes(state);
-        shiftRows(state);
-        addRoundKey(state, expandedKey, Nr);
-        for (int i = 0; i < tmp.length; i++)
-            tmp[i] = state[i / 4][i % 4];
-        return tmp;
     }
 
     public byte[] decrypt(byte[] in) {
@@ -311,32 +351,5 @@ public class AESAlgorithm {
         }
         return state;
     }
-
-
-
-
-
-
-
-
-    /* Przygotowanie podkluczy:
-        generowany jest jeden podklucz początkowy, a następnie po kolejnym jednym podkluczu dla każdej rundy szyfrującej.
-     */
-
-    /* Runda inicjująca:
-        każdy bajt w bloku danych jest dodawany do odpowiadającego mu bajtowi pierwszego podklucza za pomocą sumowania XOR.
-     */
-
-    /* Runda szyfrująca:
-        1. Każdy bajt danych jest zastępowany innym bajtem, na podstawie z góry zdefiniowanej tabeli - sbox
-        2. Przesunięcie bajtów w trzech ostatnich macierzach stanu w lewo
-        3. Mnożenie kolumn: wszystkie kolumny macierzy stanu są mnożone przez stałą macierz o wielkości 4 bajty × 4 bajty
-        4. Dodanie XOR wszystkich bajtów bloku danych do bajtów podklucza właściwego dla danej rundy
-     */
-
-    /* Runda kończąca:
-        wykonywane są te same operacje co w normalnych rundach szyfrujących, z wyjątkiem operacji mnożenia kolumn, która w Rundzie Kończącej jest pomijana.
-     */
-
 
 }
