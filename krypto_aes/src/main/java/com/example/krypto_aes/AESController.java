@@ -110,8 +110,8 @@ public class AESController {
     public void pressedEncode() {
         message = toEncodeArea.getText().getBytes();
         message = algorithm.encode(message);
-        result = algorithm.encrypt(message);
-        result = Base64.getEncoder().encode(result);        // może tak??? coś to daje XD
+//        result = algorithm.encrypt(message);
+        result = Base64.getEncoder().encode(message);        // może tak??? coś to daje XD
         String displayMessage = new String(result);
         encodedArea.setText(displayMessage);
     }
@@ -146,7 +146,7 @@ public class AESController {
         String messageString = toDecodeArea.getText();
         message = hexToBytes(messageString);
         // co powinno być pierwsze xd
-        message = algorithm.decrypt(message);
+//        message = algorithm.decrypt(message);
         result = algorithm.decode(message);
         result = Base64.getEncoder().encode(result);        // nie wiem czy takie coś tu też?
         String displayResult = new String(result);
