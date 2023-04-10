@@ -44,6 +44,7 @@ public class AESController {
     private byte[] result;
     private byte[] primaryKey;
     private int[] expandedKey = new int[4 * (10 + 1)];
+    PopOutWindow popOutWindow = new PopOutWindow();
 
 
     @FXML
@@ -139,6 +140,9 @@ public class AESController {
             message = Files.readAllBytes(file.toPath());
             String displayMessage = new String(message);
             toDecodeArea.setText(displayMessage);
+        }
+        else {
+            popOutWindow.showMassage("NIE WYBRANO PLIKU");
         }
     }
 
