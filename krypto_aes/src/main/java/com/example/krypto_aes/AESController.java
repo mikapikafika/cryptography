@@ -1,18 +1,22 @@
 package com.example.krypto_aes;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import java.io.*;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.ResourceBundle;
 
-public class AESController {
+public class AESController implements Initializable {
 
     // key
     @FXML
@@ -23,6 +27,9 @@ public class AESController {
     private TextField readKeyField;
     @FXML
     private TextField saveKeyField;
+    @FXML
+    private ChoiceBox<Integer> keyChoice;
+    private Integer[] keyOptions = {128, 192, 256};
 
     // encode
     @FXML
@@ -43,7 +50,8 @@ public class AESController {
     private byte[] message;
     private byte[] result;
     private byte[] primaryKey;
-    private int[] expandedKey = new int[4 * (10 + 1)];
+    private int keyLength;
+    private int[] expandedKey;
     PopOutWindow popOutWindow = new PopOutWindow();
 
 
@@ -52,14 +60,27 @@ public class AESController {
         StageSetup.buildStage("main-stage.fxml");
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        keyChoice.getItems().addAll(keyOptions);
+        keyChoice.setOnAction(this::getKeyLength);
+    }
+
+    private void getKeyLength(ActionEvent actionEvent) {
+        keyLength = keyChoice.getValue();
+    }
+
     @FXML
     public void pressedGenerateKey() throws NoSuchAlgorithmException {
-        primaryKey = keyHandler.generateKey(128);
-        keyHandler.expandKey(primaryKey, 4, 4, 10, expandedKey);
+        System.out.println(keyLength);
+        primaryKey = keyHandler.generateKey(keyLength);
+        keyHandler.expandKey(primaryKey, algorithm.getNk(), algorithm.getNb(), algorithm.getNr(), expandedKey);
         algorithm.setPrimaryKey(primaryKey);
         algorithm.setExpandedKey(expandedKey);
         String displayKey = bytesToHex(algorithm.getPrimaryKey());
         generateKeyField.setText(displayKey);
+        System.out.println(Arrays.toString(primaryKey));
+        System.out.println(Arrays.toString(expandedKey));
     }
 
     @FXML
