@@ -134,6 +134,12 @@ public class AESAlgorithm {
     }
 
     public byte[] decode(byte[] message) {
+        System.out.println(message.length);
+        for (byte x: message
+             ) {
+            System.out.print(x);
+
+        }
         byte[] result = new byte[message.length];
         byte[] block = new byte[16];
         for (int i = 0; i < message.length; i += 16) {

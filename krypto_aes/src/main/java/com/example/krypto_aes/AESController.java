@@ -110,8 +110,9 @@ public class AESController {
     public void pressedEncode() {
         message = toEncodeArea.getText().getBytes();
         message = algorithm.encode(message);
-        result = algorithm.encrypt(message);
-        result = Base64.getEncoder().encode(result);        // może tak??? coś to daje XD
+        System.out.println(message.length);
+        result = Base64.getEncoder().encode(message);        // może tak??? coś to daje XD
+        System.out.println(result.length);
         String displayMessage = new String(result);
         encodedArea.setText(displayMessage);
     }
@@ -144,13 +145,14 @@ public class AESController {
     @FXML
     public void pressedDecode() {
         String messageString = toDecodeArea.getText();
-        message = hexToBytes(messageString);
-        // co powinno być pierwsze xd
-        message = algorithm.decrypt(message);
-        result = algorithm.decode(message);
-        result = Base64.getEncoder().encode(result);        // nie wiem czy takie coś tu też?
+//        message = hexToBytes(messageString);//
+        message = messageString.getBytes();
+        result = Base64.getDecoder().decode(message);
+
+        result = algorithm.decode(result);
+//        result = Base64.getEncoder().encode(result);        // nie wiem czy takie coś tu też?
         String displayResult = new String(result);
-        encodedArea.setText(displayResult);
+        decodedArea.setText(displayResult);
     }
 
     // tego nie tykałam nawet
