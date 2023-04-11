@@ -26,7 +26,7 @@
             </Label>
          </children>
       </Pane>
-      <Button fx:id="buttonAES1" alignment="CENTER" contentDisplay="CENTER" layoutX="321.0" layoutY="238.0" mnemonicParsing="false" onAction="#switchToAES" prefHeight="114.0" prefWidth="207.0" text="DSA algorithm creating/verifying digital signature" textAlignment="CENTER" wrapText="true">
+      <Button fx:id="buttonDSA" alignment="CENTER" contentDisplay="CENTER" layoutX="321.0" layoutY="238.0" mnemonicParsing="false" onAction="#switchToDSA" prefHeight="114.0" prefWidth="207.0" text="DSA algorithm creating/verifying digital signature" textAlignment="CENTER" wrapText="true">
          <font>
             <Font name="Consolas" size="16.0" />
          </font>
