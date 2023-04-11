@@ -74,13 +74,12 @@ public class AESController implements Initializable {
     public void pressedGenerateKey() throws NoSuchAlgorithmException {
         System.out.println(keyLength);
         primaryKey = keyHandler.generateKey(keyLength);
-        keyHandler.expandKey(primaryKey, algorithm.getNk(), algorithm.getNb(), algorithm.getNr(), expandedKey);
         algorithm.setPrimaryKey(primaryKey);
+        expandedKey = new int[algorithm.getNb() * (algorithm.getNr() + 1)];
+        keyHandler.expandKey(primaryKey, algorithm.getNk(), algorithm.getNb(), algorithm.getNr(), expandedKey);
         algorithm.setExpandedKey(expandedKey);
         String displayKey = bytesToHex(algorithm.getPrimaryKey());
         generateKeyField.setText(displayKey);
-        System.out.println(Arrays.toString(primaryKey));
-        System.out.println(Arrays.toString(expandedKey));
     }
 
     @FXML
