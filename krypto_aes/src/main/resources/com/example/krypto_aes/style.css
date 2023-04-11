@@ -1,7 +1,22 @@
 .backgroundColor {
-    -fx-background-color: linear-gradient(to right,#99FEFF, #94DAFF, #b1a6fc, #B983FF);
+    -fx-background-color: linear-gradient(to right, #FEAC5E, #C779D0, #4BC0C8);
 }
 
 #instructionBg, #keyPane, #encodePane, #decodePane {
     -fx-background-color: rgba(255,255,255,0.7);
 }
+
+#chooseRegion {
+    -fx-background-radius: 10 10 10 10;
+    -fx-background-color: #e0e0e0;
+}
+
+#aesButton, #dsaButton {
+    -fx-background-radius: 10 10 10 10;
+}
+
+.tab-pane *.tab-header-area *.tab-header-background {
+    -fx-background-color:transparent;
+}
+
+
