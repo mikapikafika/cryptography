@@ -1,6 +1,5 @@
 package com.example.krypto_aes;
 
-
 import com.example.krypto_aes.exceptions.KeyException;
 import com.example.krypto_aes.exceptions.MessageException;
 
@@ -28,8 +27,7 @@ public class AESAlgorithm {
     }
 
     /**
-     * sets primaryKey, if key is wrong size, throws KeyException
-     *
+     * Sets primaryKey, if key is the wrong size, throws KeyException
      * @param primaryKey
      */
     public void setPrimaryKey(byte[] primaryKey) {
@@ -105,7 +103,6 @@ public class AESAlgorithm {
                 result[i + j] = block[j];
             }
         }
-
 
         return result;
     }
