@@ -7,7 +7,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class PopOutWindow {
-    public void showMassage(String message) {
+    public void showMessage(String message) {
         Stage stage = new Stage();
         VBox vbox = new VBox();
         TextField textField = new TextField(message);

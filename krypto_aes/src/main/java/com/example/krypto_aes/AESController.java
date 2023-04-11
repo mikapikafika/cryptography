@@ -15,7 +15,6 @@ import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Base64;
@@ -75,10 +74,17 @@ public class AESController implements Initializable {
         keyLength = keyChoice.getValue();
     }
 
+    /**
+     * Generates a primary key depending on the given length and displays it in proper text field
+     * if key length is not specified (is zero) throws GuiException
+     * primary key is stored in primaryKey variable
+     * @throws NoSuchAlgorithmException
+     * @throws GuiException
+     */
     @FXML
     public void pressedGenerateKey() throws NoSuchAlgorithmException, GuiException {
         if (this.keyLength == 0) {
-            popOutWindow.showMassage("The key length has not been selected");
+            popOutWindow.showMessage("The key length has not been selected");
             throw new GuiException("The key length has not been selected");
         }
         primaryKey = keyHandler.generateKey(keyLength);
@@ -90,6 +96,12 @@ public class AESController implements Initializable {
         generateKeyField.setText(displayKey);
     }
 
+    /**
+     * Reads primary key in hex from file, then transforms it to bytes and stores in primaryKey
+     * and displays it in proper text field
+     * if key size is wrong throws GuiException
+     * @throws IOException
+     */
     @FXML
     public void pressedReadKey() throws IOException {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text files", "*.txt"));
@@ -100,7 +112,7 @@ public class AESController implements Initializable {
             try{
                 algorithm.setPrimaryKey(primaryKey);
             } catch (KeyException e) {
-                popOutWindow.showMassage("Wrong key size");
+                popOutWindow.showMessage("Wrong key size");
                 throw new GuiException("Wrong key size");
             }
             readKeyField.setText(displayKey);
@@ -109,7 +121,7 @@ public class AESController implements Initializable {
             algorithm.setExpandedKey(expandedKey);
         }
         else {
-            popOutWindow.showMassage("No file selected");
+            popOutWindow.showMessage("No file selected");
             throw new GuiException("No file selected");
         }
     }
@@ -131,7 +143,7 @@ public class AESController implements Initializable {
             writer.close();
         }
         else {
-            popOutWindow.showMassage("No file selected");
+            popOutWindow.showMessage("No file selected");
             throw new GuiException("No file selected");
         }
 
@@ -148,7 +160,7 @@ public class AESController implements Initializable {
             String displayMessage = new String(message);
             toEncodeArea.setText(displayMessage);
         } else {
-            popOutWindow.showMassage("No file selected");
+            popOutWindow.showMessage("No file selected");
             throw new GuiException("No file selected");
         }
     }
@@ -156,14 +168,14 @@ public class AESController implements Initializable {
     @FXML
     public void pressedEncode() throws GuiException {
         if (primaryKey == null) {
-            popOutWindow.showMassage("Key is null");
+            popOutWindow.showMessage("Key is null");
             throw new GuiException("Key is null");
         }
         message = toEncodeArea.getText().getBytes();
         try {
             message = algorithm.encode(message);
         } catch (MessageException e) {
-            popOutWindow.showMassage("Message can't be empty");
+            popOutWindow.showMessage("Message can't be empty");
             throw new GuiException(e);
         }
         result = Base64.getEncoder().encode(message);        // może tak??? coś to daje XD
@@ -181,7 +193,7 @@ public class AESController implements Initializable {
             writer.write(stringResult);
             writer.close();
         } else {
-            popOutWindow.showMassage("No file selected");
+            popOutWindow.showMessage("No file selected");
             throw new GuiException("No file selected");
         }
     }
@@ -196,7 +208,7 @@ public class AESController implements Initializable {
             String displayMessage = new String(message);
             toDecodeArea.setText(displayMessage);
         } else {
-            popOutWindow.showMassage("No file selected");
+            popOutWindow.showMessage("No file selected");
             throw new GuiException("No file selected");
         }
     }
@@ -204,7 +216,7 @@ public class AESController implements Initializable {
     @FXML
     public void pressedDecode() throws GuiException {
         if (primaryKey == null) {
-            popOutWindow.showMassage("Key is null");
+            popOutWindow.showMessage("Key is null");
             throw new GuiException("Key is null");
         }
         String messageString = toDecodeArea.getText();
