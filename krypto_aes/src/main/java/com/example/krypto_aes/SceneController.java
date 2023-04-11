@@ -12,4 +12,9 @@ public class SceneController {
     public void switchToAES() {
         StageSetup.buildStage("aes-stage.fxml");
     }
+
+    @FXML
+    public void switchToDSA() {
+        StageSetup.buildStage("dsa-stage.fxml");
+    }
 }

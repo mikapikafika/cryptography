@@ -1,5 +1,8 @@
 package com.example.krypto_aes;
 
+import com.example.krypto_aes.exceptions.GuiException;
+import com.example.krypto_aes.exceptions.KeyException;
+import com.example.krypto_aes.exceptions.MessageException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -7,10 +10,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
+
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Base64;
@@ -50,7 +55,7 @@ public class AESController implements Initializable {
     private byte[] message;
     private byte[] result;
     private byte[] primaryKey;
-    private int keyLength;
+    private int keyLength = 0;
     private int[] expandedKey;
     PopOutWindow popOutWindow = new PopOutWindow();
 
@@ -71,8 +76,11 @@ public class AESController implements Initializable {
     }
 
     @FXML
-    public void pressedGenerateKey() throws NoSuchAlgorithmException {
-        System.out.println(keyLength);
+    public void pressedGenerateKey() throws NoSuchAlgorithmException, GuiException {
+        if (this.keyLength == 0) {
+            popOutWindow.showMassage("The key length has not been selected");
+            throw new GuiException("The key length has not been selected");
+        }
         primaryKey = keyHandler.generateKey(keyLength);
         algorithm.setPrimaryKey(primaryKey);
         expandedKey = new int[algorithm.getNb() * (algorithm.getNr() + 1)];
@@ -88,11 +96,21 @@ public class AESController implements Initializable {
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
             String displayKey = new String(Files.readAllBytes(file.toPath()));
-            readKeyField.setText(displayKey);
             primaryKey = hexToBytes(displayKey);
-            keyHandler.expandKey(primaryKey, 4, 4, 10, expandedKey);
-            algorithm.setPrimaryKey(primaryKey);
+            try{
+                algorithm.setPrimaryKey(primaryKey);
+            } catch (KeyException e) {
+                popOutWindow.showMassage("Wrong key size");
+                throw new GuiException("Wrong key size");
+            }
+            readKeyField.setText(displayKey);
+            expandedKey = new int[algorithm.getNb() * (algorithm.getNr() + 1)];
+            keyHandler.expandKey(primaryKey, algorithm.getNk(), algorithm.getNb(), algorithm.getNr(), expandedKey);
             algorithm.setExpandedKey(expandedKey);
+        }
+        else {
+            popOutWindow.showMassage("No file selected");
+            throw new GuiException("No file selected");
         }
     }
 
@@ -112,6 +130,11 @@ public class AESController implements Initializable {
             }
             writer.close();
         }
+        else {
+            popOutWindow.showMassage("No file selected");
+            throw new GuiException("No file selected");
+        }
+
     }
 
     // SZYFROWANIE - CHYBA DZIAŁA
@@ -124,16 +147,26 @@ public class AESController implements Initializable {
             message = Files.readAllBytes(file.toPath());
             String displayMessage = new String(message);
             toEncodeArea.setText(displayMessage);
+        } else {
+            popOutWindow.showMassage("No file selected");
+            throw new GuiException("No file selected");
         }
     }
 
     @FXML
-    public void pressedEncode() {
+    public void pressedEncode() throws GuiException {
+        if (primaryKey == null) {
+            popOutWindow.showMassage("Key is null");
+            throw new GuiException("Key is null");
+        }
         message = toEncodeArea.getText().getBytes();
-        message = algorithm.encode(message);
-        System.out.println(message.length);
+        try {
+            message = algorithm.encode(message);
+        } catch (MessageException e) {
+            popOutWindow.showMassage("Message can't be empty");
+            throw new GuiException(e);
+        }
         result = Base64.getEncoder().encode(message);        // może tak??? coś to daje XD
-        System.out.println(result.length);
         String displayMessage = new String(result);
         encodedArea.setText(displayMessage);
     }
@@ -147,9 +180,11 @@ public class AESController implements Initializable {
             FileWriter writer = new FileWriter(file);
             writer.write(stringResult);
             writer.close();
+        } else {
+            popOutWindow.showMassage("No file selected");
+            throw new GuiException("No file selected");
         }
     }
-
     // DESZYFROWANIE - NIE DZIAŁA
 
     @FXML
@@ -160,21 +195,22 @@ public class AESController implements Initializable {
             message = Files.readAllBytes(file.toPath());
             String displayMessage = new String(message);
             toDecodeArea.setText(displayMessage);
-        }
-        else {
-            popOutWindow.showMassage("NIE WYBRANO PLIKU");
+        } else {
+            popOutWindow.showMassage("No file selected");
+            throw new GuiException("No file selected");
         }
     }
 
     @FXML
-    public void pressedDecode() {
+    public void pressedDecode() throws GuiException {
+        if (primaryKey == null) {
+            popOutWindow.showMassage("Key is null");
+            throw new GuiException("Key is null");
+        }
         String messageString = toDecodeArea.getText();
-//        message = hexToBytes(messageString);//
         message = messageString.getBytes();
         result = Base64.getDecoder().decode(message);
-
         result = algorithm.decode(result);
-//        result = Base64.getEncoder().encode(result);        // nie wiem czy takie coś tu też?
         String displayResult = new String(result);
         decodedArea.setText(displayResult);
     }
@@ -204,7 +240,7 @@ public class AESController implements Initializable {
         byte[] bytes = new byte[length / 2];
         for (int i = 0; i < length; i += 2) {
             bytes[i / 2] = (byte) ((Character.digit(string.charAt(i), 16) << 4)
-                    + Character.digit(string.charAt(i+1), 16));
+                    + Character.digit(string.charAt(i + 1), 16));
         }
         return bytes;
     }

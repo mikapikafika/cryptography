@@ -1,6 +1,9 @@
 package com.example.krypto_aes;
 
 
+import com.example.krypto_aes.exceptions.KeyException;
+import com.example.krypto_aes.exceptions.MessageException;
+
 public class AESAlgorithm {
     private final int Nb = 4;
     private int Nk;  // 4, 6 or 8
@@ -41,7 +44,7 @@ public class AESAlgorithm {
                 this.Nr = 14;
                 this.Nk = 8;
             }
-            default -> throw new IllegalArgumentException("Invalid key size: " + keySize);
+            default -> throw new KeyException("Invalid key size: " + keySize);
         }
     }
 
@@ -58,11 +61,11 @@ public class AESAlgorithm {
      * Encodes the message using a block cipher
      * @param message to be encrypted
      * @return encrypted message
-     * @throws IllegalArgumentException
+     * @throws MessageException
      */
-    public byte[] encode(byte[] message) throws IllegalArgumentException {
+    public byte[] encode(byte[] message) throws MessageException {
         if (message == null || message.length == 0) {
-            throw new IllegalArgumentException("Message can't be empty.");
+            throw new MessageException("Message can't be empty.");
         }
 
         // calculating nr of full blocks
@@ -98,11 +101,7 @@ public class AESAlgorithm {
                 result[i + j] = block[j];
             }
         }
-//        for (int i = 0; i < length; i += 16) {
-//            System.arraycopy(tmp, i, block, 0, 16);
-//            block = encrypt(block);
-//            System.arraycopy(block, 0, result, i, 16);
-//        }
+
 
         return result;
     }
@@ -134,12 +133,6 @@ public class AESAlgorithm {
     }
 
     public byte[] decode(byte[] message) {
-        System.out.println(message.length);
-        for (byte x: message
-             ) {
-            System.out.print(x);
-
-        }
         byte[] result = new byte[message.length];
         byte[] block = new byte[16];
         for (int i = 0; i < message.length; i += 16) {
@@ -348,14 +341,5 @@ public class AESAlgorithm {
         }
     }
 
-    public byte[][] byteArrayToState(byte[] byteArray) { // z 1D do 2D tablicy
-        byte[][] state = new byte[4][4];
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                state[j][i] = byteArray[i * 4 + j];
-            }
-        }
-        return state;
-    }
 
 }

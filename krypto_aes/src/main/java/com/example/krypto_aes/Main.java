@@ -1,5 +1,7 @@
 package com.example.krypto_aes;
 
+import com.example.krypto_aes.exceptions.MessageException;
+
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
@@ -48,7 +50,12 @@ public class Main {
                     print1DArray(afterDecrypting);
 
 
-                    byte[] afterEncode = algorithm.encode(blok);
+                    byte[] afterEncode = new byte[0];
+                    try {
+                        afterEncode = algorithm.encode(blok);
+                    } catch (MessageException e) {
+                        throw new RuntimeException(e);
+                    }
                     System.out.println("after encoding");
                     print1DArray(afterEncode);
 
@@ -61,7 +68,12 @@ public class Main {
                     System.out.println(string2);
                     byte[] blok2 = string2.getBytes();
 
-                    byte[] afterEncode2 = algorithm.encode(blok2);
+                    byte[] afterEncode2 = new byte[0];
+                    try {
+                        afterEncode2 = algorithm.encode(blok2);
+                    } catch (MessageException e) {
+                        throw new RuntimeException(e);
+                    }
                     String str = new String(afterEncode2);
                     System.out.println(str);
 
@@ -73,7 +85,12 @@ public class Main {
                     String string = "tekst tekst";
                     byte[] mess = string.getBytes();
                     AESAlgorithm algorithm = new AESAlgorithm();
-                    byte[] blok = algorithm.encode(mess);
+                    byte[] blok = new byte[0];
+                    try {
+                        blok = algorithm.encode(mess);
+                    } catch (MessageException e) {
+                        throw new RuntimeException(e);
+                    }
                     algorithm.encrypt(blok);
                 }
                 case 3 -> {
@@ -103,8 +120,6 @@ public class Main {
                     KeyHandler keyHandler = new KeyHandler();
                     byte[] cipherKey = {(byte) 0x2b, 0x7e, 0x15, 0x16, 0x28, (byte) 0xae, (byte) 0xd2, (byte) 0xa6,
                             (byte) 0xab, (byte) 0xf7, 0x15, (byte) 0x88, 0x09, (byte) 0xcf, 0x4f, 0x3c};
-                    int[] expandedKey = new int[4 * (10 + 1)];
-                    keyHandler.expandKeyForTests(cipherKey, 4, 4, 10, expandedKey);
                 }
 
                 default -> {
