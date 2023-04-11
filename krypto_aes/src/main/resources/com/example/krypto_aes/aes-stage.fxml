@@ -3,6 +3,7 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -12,18 +13,18 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="880.0" prefWidth="605.0" styleClass="backgroundColor" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.krypto_aes.AESController">
+<AnchorPane prefHeight="931.0" prefWidth="605.0" styleClass="backgroundColor" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.krypto_aes.AESController">
    <children>
-      <Pane fx:id="keyPane" layoutX="33.0" layoutY="63.0" prefHeight="198.0" prefWidth="540.0">
+      <Pane fx:id="keyPane" layoutX="33.0" layoutY="67.0" prefHeight="241.0" prefWidth="540.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="139.0" layoutY="14.0" prefHeight="31.0" prefWidth="247.0" text="KLUCZ">
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="204.0" layoutY="14.0" prefHeight="35.0" prefWidth="132.0" text="KEY">
                <font>
                   <Font name="Consolas" size="30.0" />
                </font>
             </Label>
-            <ButtonBar layoutX="64.0" layoutY="51.0" prefHeight="35.0" prefWidth="396.0">
+            <ButtonBar layoutX="66.0" layoutY="103.0" prefHeight="35.0" prefWidth="396.0">
               <buttons>
-                <Button maxWidth="200.0" mnemonicParsing="false" onAction="#pressedGenerateKey" prefHeight="26.0" text="Wygeneruj">
+                <Button maxWidth="200.0" mnemonicParsing="false" onAction="#pressedGenerateKey" prefHeight="26.0" text="Generate">
                      <font>
                         <Font name="Consolas" size="12.0" />
                      </font>
@@ -37,9 +38,9 @@
                      </cursor></TextField>
               </buttons>
             </ButtonBar>
-            <ButtonBar layoutX="5.0" layoutY="96.0" prefHeight="35.0" prefWidth="509.0">
+            <ButtonBar layoutX="7.0" layoutY="148.0" prefHeight="35.0" prefWidth="509.0">
                <buttons>
-                  <Label alignment="CENTER" maxWidth="148.0" prefHeight="18.0" text="Wczytaj klucz z pliku" textAlignment="CENTER">
+                  <Label alignment="CENTER" maxWidth="148.0" prefHeight="18.0" text="Read key from file" textAlignment="CENTER">
                      <font>
                         <Font name="Consolas" size="12.0" />
                      </font>
@@ -48,7 +49,7 @@
                      <cursor>
                         <Cursor fx:constant="TEXT" />
                      </cursor></TextField>
-                  <Button maxWidth="10.0" mnemonicParsing="false" onAction="#pressedReadKey" prefHeight="26.0" text="Wczytaj">
+                  <Button maxWidth="10.0" mnemonicParsing="false" onAction="#pressedReadKey" prefHeight="26.0" text="Read">
                      <font>
                         <Font name="Consolas" size="12.0" />
                      </font>
@@ -58,9 +59,9 @@
                   </Button>
                </buttons>
             </ButtonBar>
-            <ButtonBar layoutX="5.0" layoutY="140.0" prefHeight="35.0" prefWidth="509.0">
+            <ButtonBar layoutX="7.0" layoutY="192.0" prefHeight="35.0" prefWidth="509.0">
                <buttons>
-                  <Label alignment="CENTER" maxWidth="148.0" prefHeight="18.0" text="Zapisz klucz do pliku" textAlignment="CENTER">
+                  <Label alignment="CENTER" maxWidth="148.0" prefHeight="18.0" text="Save key to file" textAlignment="CENTER">
                      <font>
                         <Font name="Consolas" size="12.0" />
                      </font>
@@ -69,7 +70,7 @@
                      <cursor>
                         <Cursor fx:constant="TEXT" />
                      </cursor></TextField>
-                  <Button maxWidth="10.0" mnemonicParsing="false" onAction="#pressedSaveKey" prefHeight="26.0" text="Zapisz">
+                  <Button maxWidth="10.0" mnemonicParsing="false" onAction="#pressedSaveKey" prefHeight="26.0" text="Save">
                      <font>
                         <Font name="Consolas" size="12.0" />
                      </font>
@@ -79,22 +80,28 @@
                   </Button>
                </buttons>
             </ButtonBar>
+            <ChoiceBox fx:id="keyChoice" layoutX="309.0" layoutY="66.0" prefHeight="25.0" prefWidth="88.0" />
+            <Label layoutX="122.0" layoutY="71.0" text="Choose key's size in bits">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
-      <TabPane layoutX="33.0" layoutY="284.0" prefHeight="565.0" prefWidth="540.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane layoutX="33.0" layoutY="334.0" prefHeight="565.0" prefWidth="540.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
-          <Tab closable="false" text="Szyfrowanie">
+          <Tab closable="false" text="Encryption">
             <content>
               <AnchorPane fx:id="encodePane" minHeight="0.0" minWidth="0.0" prefHeight="513.0" prefWidth="540.0">
                      <children>
-                        <ButtonBar layoutX="50.0" layoutY="14.0" prefHeight="48.0" prefWidth="418.0">
+                        <ButtonBar layoutX="50.0" layoutY="14.0" prefHeight="48.0" prefWidth="442.0">
                           <buttons>
-                              <Label prefHeight="18.0" prefWidth="204.0" text="Wczytaj dane z pliku...">
+                              <Label prefHeight="18.0" prefWidth="283.0" text="Read plaintext from file...">
                                  <font>
                                     <Font name="Consolas" size="16.0" />
                                  </font>
                               </Label>
-                              <Button alignment="CENTER" contentDisplay="CENTER" maxWidth="170.0" mnemonicParsing="false" onAction="#pressedReadData" prefHeight="35.0" prefWidth="88.0" text="Wybierz plik">
+                              <Button alignment="CENTER" contentDisplay="CENTER" maxWidth="170.0" mnemonicParsing="false" onAction="#pressedReadData" prefHeight="35.0" prefWidth="88.0" text="Choose file">
                                  <font>
                                     <Font name="Consolas" size="14.0" />
                                  </font>
@@ -109,12 +116,12 @@
                               <Cursor fx:constant="TEXT" />
                            </cursor>
                         </TextArea>
-                        <Label alignment="CENTER" layoutX="160.0" layoutY="62.0" prefHeight="26.0" prefWidth="220.0" text="... lub wpisz dane" textAlignment="CENTER">
+                        <Label alignment="CENTER" layoutX="160.0" layoutY="62.0" prefHeight="26.0" prefWidth="220.0" text="... or write it here" textAlignment="CENTER">
                            <font>
                               <Font name="Consolas" size="16.0" />
                            </font>
                         </Label>
-                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="202.0" layoutY="257.0" maxWidth="180.0" mnemonicParsing="false" onAction="#pressedEncode" prefHeight="35.0" prefWidth="139.0" text="Szyfruj">
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="202.0" layoutY="257.0" maxWidth="180.0" mnemonicParsing="false" onAction="#pressedEncode" prefHeight="35.0" prefWidth="139.0" text="Encrypt">
                            <font>
                               <Font name="Consolas" size="14.0" />
                            </font>
@@ -122,7 +129,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
-                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="187.0" layoutY="466.0" maxWidth="180.0" mnemonicParsing="false" onAction="#pressedSaveCryptogram" prefHeight="42.0" prefWidth="168.0" text="Zapisz szyfrogram">
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="187.0" layoutY="466.0" maxWidth="180.0" mnemonicParsing="false" onAction="#pressedSaveCryptogram" prefHeight="42.0" prefWidth="168.0" text="Save ciphertext">
                            <font>
                               <Font name="Consolas" size="14.0" />
                            </font>
@@ -139,18 +146,18 @@
                   </AnchorPane>
             </content>
           </Tab>
-          <Tab text="Deszyfrowanie">
+          <Tab text="Decryption">
             <content>
               <AnchorPane fx:id="decodePane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ButtonBar layoutX="30.0" layoutY="14.0" prefHeight="48.0" prefWidth="465.0">
+                        <ButtonBar layoutX="53.0" layoutY="14.0" prefHeight="48.0" prefWidth="441.0">
                            <buttons>
-                              <Label maxWidth="260.0" prefHeight="18.0" prefWidth="321.0" text="Wczytaj szyfrogram z pliku...">
+                              <Label maxWidth="260.0" prefHeight="18.0" prefWidth="321.0" text="Read ciphertext from file...">
                                  <font>
                                     <Font name="Consolas" size="16.0" />
                                  </font>
                               </Label>
-                              <Button alignment="CENTER" contentDisplay="CENTER" maxWidth="170.0" mnemonicParsing="false" onAction="#pressedReadCryptogram" prefHeight="35.0" prefWidth="214.0" text="Wybierz plik">
+                              <Button alignment="CENTER" contentDisplay="CENTER" maxWidth="150.0" mnemonicParsing="false" onAction="#pressedReadCryptogram" prefHeight="35.0" prefWidth="214.0" text="Choose file">
                                  <font>
                                     <Font name="Consolas" size="14.0" />
                                  </font>
@@ -160,7 +167,7 @@
                               </Button>
                            </buttons>
                         </ButtonBar>
-                        <Label alignment="CENTER" layoutX="153.0" layoutY="62.0" prefHeight="26.0" prefWidth="220.0" text="... lub wpisz szyfrogram" textAlignment="CENTER">
+                        <Label alignment="CENTER" layoutX="165.0" layoutY="62.0" prefHeight="26.0" prefWidth="209.0" text="... or write it here" textAlignment="CENTER">
                            <font>
                               <Font name="Consolas" size="16.0" />
                            </font>
@@ -170,7 +177,7 @@
                               <Cursor fx:constant="TEXT" />
                            </cursor>
                         </TextArea>
-                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="201.0" layoutY="257.0" maxWidth="180.0" mnemonicParsing="false" onAction="#pressedDecode" prefHeight="35.0" prefWidth="139.0" text="Deszyfruj">
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="201.0" layoutY="257.0" maxWidth="180.0" mnemonicParsing="false" onAction="#pressedDecode" prefHeight="35.0" prefWidth="139.0" text="Decrypt">
                            <font>
                               <Font name="Consolas" size="14.0" />
                            </font>
@@ -183,7 +190,7 @@
                               <Cursor fx:constant="TEXT" />
                            </cursor>
                         </TextArea>
-                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="187.0" layoutY="466.0" maxWidth="180.0" mnemonicParsing="false" onAction="#pressedSaveData" prefHeight="42.0" prefWidth="168.0" text="Zapisz dane">
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="187.0" layoutY="466.0" maxWidth="180.0" mnemonicParsing="false" onAction="#pressedSaveData" prefHeight="42.0" prefWidth="168.0" text="Save plaintext">
                            <font>
                               <Font name="Consolas" size="14.0" />
                            </font>
@@ -197,7 +204,7 @@
           </Tab>
         </tabs>
       </TabPane>
-      <Button alignment="CENTER" contentDisplay="CENTER" layoutX="33.0" layoutY="14.0" mnemonicParsing="false" onAction="#pressedBack" prefHeight="35.0" prefWidth="105.0" text="Powrót">
+      <Button alignment="CENTER" contentDisplay="CENTER" layoutX="33.0" layoutY="14.0" mnemonicParsing="false" onAction="#pressedBack" prefHeight="35.0" prefWidth="105.0" text="BACK">
          <font>
             <Font name="Consolas" size="15.0" />
          </font>

@@ -57,7 +57,7 @@ public class Main {
                     print1DArray(afterDecode);
 
 
-                    String string2 = "rowerrowerrowerrr";
+                    String string2 = "OLA MA KOTA A KOT MA OLE";
                     System.out.println(string2);
                     byte[] blok2 = string2.getBytes();
 
