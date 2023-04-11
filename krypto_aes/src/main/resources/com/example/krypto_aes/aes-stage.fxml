@@ -13,9 +13,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="931.0" prefWidth="605.0" styleClass="backgroundColor" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.krypto_aes.AESController">
+<AnchorPane prefHeight="836.0" prefWidth="581.0" styleClass="backgroundColor" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.krypto_aes.AESController">
    <children>
-      <Pane fx:id="keyPane" layoutX="33.0" layoutY="67.0" prefHeight="241.0" prefWidth="540.0">
+      <Pane fx:id="keyPane" layoutX="21.0" layoutY="20.0" prefHeight="241.0" prefWidth="540.0">
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" layoutX="204.0" layoutY="14.0" prefHeight="35.0" prefWidth="132.0" text="KEY">
                <font>
@@ -35,7 +35,8 @@
                   <TextField fx:id="generateKeyField" prefHeight="25.0" prefWidth="390.0">
                      <cursor>
                         <Cursor fx:constant="TEXT" />
-                     </cursor></TextField>
+                     </cursor>
+                  </TextField>
               </buttons>
             </ButtonBar>
             <ButtonBar layoutX="7.0" layoutY="148.0" prefHeight="35.0" prefWidth="509.0">
@@ -86,15 +87,23 @@
                   <Font name="Consolas" size="12.0" />
                </font>
             </Label>
+            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="7.0" mnemonicParsing="false" onAction="#pressedBack" prefHeight="35.0" prefWidth="105.0" text="BACK">
+               <font>
+                  <Font name="Consolas" size="15.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
          </children>
       </Pane>
-      <TabPane layoutX="33.0" layoutY="334.0" prefHeight="565.0" prefWidth="540.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane layoutX="21.0" layoutY="275.0" prefHeight="543.0" prefWidth="540.0" stylesheets="@style.css" tabClosingPolicy="UNAVAILABLE">
         <tabs>
-          <Tab closable="false" text="Encryption">
+          <Tab closable="false" text="Encoding">
             <content>
               <AnchorPane fx:id="encodePane" minHeight="0.0" minWidth="0.0" prefHeight="513.0" prefWidth="540.0">
                      <children>
-                        <ButtonBar layoutX="50.0" layoutY="14.0" prefHeight="48.0" prefWidth="442.0">
+                        <ButtonBar layoutX="51.0" layoutY="7.0" prefHeight="48.0" prefWidth="442.0">
                           <buttons>
                               <Label prefHeight="18.0" prefWidth="283.0" text="Read plaintext from file...">
                                  <font>
@@ -111,17 +120,17 @@
                               </Button>
                           </buttons>
                         </ButtonBar>
-                        <TextArea fx:id="toEncodeArea" layoutX="50.0" layoutY="94.0" prefHeight="150.0" prefWidth="443.0">
+                        <TextArea fx:id="toEncodeArea" layoutX="51.0" layoutY="74.0" prefHeight="150.0" prefWidth="443.0">
                            <cursor>
                               <Cursor fx:constant="TEXT" />
                            </cursor>
                         </TextArea>
-                        <Label alignment="CENTER" layoutX="160.0" layoutY="62.0" prefHeight="26.0" prefWidth="220.0" text="... or write it here" textAlignment="CENTER">
+                        <Label alignment="CENTER" layoutX="160.0" layoutY="48.0" prefHeight="26.0" prefWidth="220.0" text="... or write it here" textAlignment="CENTER">
                            <font>
                               <Font name="Consolas" size="16.0" />
                            </font>
                         </Label>
-                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="202.0" layoutY="257.0" maxWidth="180.0" mnemonicParsing="false" onAction="#pressedEncode" prefHeight="35.0" prefWidth="139.0" text="Encrypt">
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="203.0" layoutY="240.0" maxWidth="180.0" mnemonicParsing="false" onAction="#pressedEncode" prefHeight="35.0" prefWidth="139.0" text="Encode">
                            <font>
                               <Font name="Consolas" size="14.0" />
                            </font>
@@ -129,7 +138,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
-                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="187.0" layoutY="466.0" maxWidth="180.0" mnemonicParsing="false" onAction="#pressedSaveCryptogram" prefHeight="42.0" prefWidth="168.0" text="Save ciphertext">
+                        <Button fx:id="saveCryptogramButton" alignment="CENTER" contentDisplay="CENTER" layoutX="187.0" layoutY="458.0" maxWidth="180.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="168.0" text="Save ciphertext">
                            <font>
                               <Font name="Consolas" size="14.0" />
                            </font>
@@ -137,7 +146,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
-                        <TextArea fx:id="encodedArea" layoutX="49.0" layoutY="304.0" prefHeight="150.0" prefWidth="443.0">
+                        <TextArea fx:id="encodedArea" layoutX="49.0" layoutY="291.0" prefHeight="150.0" prefWidth="443.0">
                            <cursor>
                               <Cursor fx:constant="TEXT" />
                            </cursor>
@@ -146,11 +155,11 @@
                   </AnchorPane>
             </content>
           </Tab>
-          <Tab text="Decryption">
+          <Tab text="Decoding">
             <content>
               <AnchorPane fx:id="decodePane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ButtonBar layoutX="53.0" layoutY="14.0" prefHeight="48.0" prefWidth="441.0">
+                        <ButtonBar layoutX="52.0" layoutY="7.0" prefHeight="48.0" prefWidth="441.0">
                            <buttons>
                               <Label maxWidth="260.0" prefHeight="18.0" prefWidth="321.0" text="Read ciphertext from file...">
                                  <font>
@@ -167,17 +176,17 @@
                               </Button>
                            </buttons>
                         </ButtonBar>
-                        <Label alignment="CENTER" layoutX="165.0" layoutY="62.0" prefHeight="26.0" prefWidth="209.0" text="... or write it here" textAlignment="CENTER">
+                        <Label alignment="CENTER" layoutX="166.0" layoutY="48.0" prefHeight="26.0" prefWidth="209.0" text="... or write it here" textAlignment="CENTER">
                            <font>
                               <Font name="Consolas" size="16.0" />
                            </font>
                         </Label>
-                        <TextArea fx:id="toDecodeArea" layoutX="50.0" layoutY="94.0" prefHeight="150.0" prefWidth="443.0">
+                        <TextArea fx:id="toDecodeArea" layoutX="51.0" layoutY="74.0" prefHeight="150.0" prefWidth="443.0">
                            <cursor>
                               <Cursor fx:constant="TEXT" />
                            </cursor>
                         </TextArea>
-                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="201.0" layoutY="257.0" maxWidth="180.0" mnemonicParsing="false" onAction="#pressedDecode" prefHeight="35.0" prefWidth="139.0" text="Decrypt">
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="203.0" layoutY="240.0" maxWidth="180.0" mnemonicParsing="false" onAction="#pressedDecode" prefHeight="35.0" prefWidth="139.0" text="Decode">
                            <font>
                               <Font name="Consolas" size="14.0" />
                            </font>
@@ -185,12 +194,12 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
-                        <TextArea fx:id="decodedArea" layoutX="49.0" layoutY="304.0" prefHeight="150.0" prefWidth="443.0">
+                        <TextArea fx:id="decodedArea" layoutX="49.0" layoutY="291.0" prefHeight="150.0" prefWidth="443.0">
                            <cursor>
                               <Cursor fx:constant="TEXT" />
                            </cursor>
                         </TextArea>
-                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="187.0" layoutY="466.0" maxWidth="180.0" mnemonicParsing="false" onAction="#pressedSaveData" prefHeight="42.0" prefWidth="168.0" text="Save plaintext">
+                        <Button fx:id="saveDataButton" alignment="CENTER" contentDisplay="CENTER" layoutX="186.0" layoutY="458.0" maxWidth="180.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="168.0" text="Save plaintext">
                            <font>
                               <Font name="Consolas" size="14.0" />
                            </font>
@@ -204,13 +213,5 @@
           </Tab>
         </tabs>
       </TabPane>
-      <Button alignment="CENTER" contentDisplay="CENTER" layoutX="33.0" layoutY="14.0" mnemonicParsing="false" onAction="#pressedBack" prefHeight="35.0" prefWidth="105.0" text="BACK">
-         <font>
-            <Font name="Consolas" size="15.0" />
-         </font>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </Button>
    </children>
 </AnchorPane>

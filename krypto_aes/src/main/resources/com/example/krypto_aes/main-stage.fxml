@@ -3,40 +3,60 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="458.0" prefWidth="608.0" styleClass="backgroundColor" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.krypto_aes.SceneController">
    <children>
-      <Button fx:id="buttonAES" alignment="CENTER" contentDisplay="CENTER" layoutX="84.0" layoutY="238.0" mnemonicParsing="false" onAction="#switchToAES" prefHeight="114.0" prefWidth="207.0" text="AES algorithm de-/encrypting data" textAlignment="CENTER" wrapText="true">
+      <Button fx:id="aesButton" alignment="CENTER" contentDisplay="CENTER" layoutX="84.0" layoutY="238.0" mnemonicParsing="false" onAction="#switchToAES" prefHeight="114.0" prefWidth="207.0" text="AES algorithm de-/encoding data" textAlignment="CENTER" wrapText="true">
          <font>
             <Font name="Consolas" size="16.0" />
          </font>
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
+         <effect>
+            <InnerShadow blurType="GAUSSIAN">
+               <color>
+                  <Color red="0.4470588266849518" green="0.4470588266849518" blue="0.4470588266849518" />
+               </color>
+            </InnerShadow>
+         </effect>
       </Button>
-      <Pane fx:id="instructionBg" layoutX="103.0" layoutY="59.0" prefHeight="133.0" prefWidth="402.0">
-         <children>
-            <Label fx:id="instruction" alignment="CENTER" contentDisplay="CENTER" layoutX="7.0" layoutY="35.0" prefHeight="64.0" prefWidth="389.0" text="CHOOSE A PROGRAM" textAlignment="CENTER">
-               <font>
-                  <Font name="Consolas" size="38.0" />
-               </font>
-            </Label>
-         </children>
-      </Pane>
-      <Button fx:id="buttonDSA" alignment="CENTER" contentDisplay="CENTER" layoutX="321.0" layoutY="238.0" mnemonicParsing="false" onAction="#switchToDSA" prefHeight="114.0" prefWidth="207.0" text="DSA algorithm creating/verifying digital signature" textAlignment="CENTER" wrapText="true">
+      <Button fx:id="dsaButton" alignment="CENTER" contentDisplay="CENTER" layoutX="321.0" layoutY="238.0" mnemonicParsing="false" onAction="#switchToDSA" prefHeight="114.0" prefWidth="207.0" text="DSA algorithm creating/verifying digital signature" textAlignment="CENTER" wrapText="true">
          <font>
             <Font name="Consolas" size="16.0" />
          </font>
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
+         <effect>
+            <InnerShadow blurType="GAUSSIAN">
+               <color>
+                  <Color red="0.4470588266849518" green="0.4470588266849518" blue="0.4470588266849518" />
+               </color>
+            </InnerShadow>
+         </effect>
       </Button>
       <Label layoutX="132.0" layoutY="408.0" text="Copyright © 2023 Michalina Wysocka &amp; Wojciech Żyndul">
          <font>
             <Font name="Consolas" size="12.0" />
+         </font>
+      </Label>
+      <Region fx:id="chooseRegion" layoutX="81.0" layoutY="72.0" prefHeight="124.0" prefWidth="447.0">
+         <effect>
+            <InnerShadow blurType="GAUSSIAN">
+               <color>
+                  <Color red="0.4470588266849518" green="0.4470588266849518" blue="0.4470588266849518" />
+               </color>
+            </InnerShadow>
+         </effect></Region>
+      <Label fx:id="instruction" alignment="CENTER" contentDisplay="CENTER" layoutX="110.0" layoutY="102.0" prefHeight="64.0" prefWidth="389.0" text="CHOOSE A PROGRAM" textAlignment="CENTER">
+         <font>
+            <Font name="Consolas" size="38.0" />
          </font>
       </Label>
    </children>

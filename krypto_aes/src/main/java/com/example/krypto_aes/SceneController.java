@@ -1,12 +1,17 @@
 package com.example.krypto_aes;
 
 import javafx.fxml.FXML;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.Button;
+import javafx.scene.layout.Region;
 
 public class SceneController {
 
     @FXML
-    private Pane instructionBg;
+    private Button aesButton;
+    @FXML
+    private Button dsaButton;
+    @FXML
+    private Region chooseRegion;
 
     @FXML
     public void switchToAES() {
