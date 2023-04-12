@@ -68,37 +68,21 @@ public class AESController implements Initializable {
         StageSetup.buildStage("main-stage.fxml");
     }
 
-    /**
-     * Makes using the ChoiceBox possible
-     * @param url
-     * @param resourceBundle
-     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         keyChoice.getItems().addAll(keyOptions);
         keyChoice.setOnAction(this::getKeyLength);
 
-        saveDataButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    pressedSave();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+        EventHandler<ActionEvent> saveHandler = actionEvent -> {
+            try {
+                pressedSave();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-        });
+        };
 
-        saveCryptogramButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    pressedSave();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
+        saveDataButton.setOnAction(saveHandler);
+        saveCryptogramButton.setOnAction(saveHandler);
     }
 
     private void getKeyLength(ActionEvent actionEvent) {
@@ -184,7 +168,7 @@ public class AESController implements Initializable {
 
     }
 
-    // ENCRYPTION
+    // ENCODING
 
     /**
      * Reads data to encrypt from the chosen file
