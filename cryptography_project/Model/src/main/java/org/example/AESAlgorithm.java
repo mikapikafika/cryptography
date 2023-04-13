@@ -29,6 +29,7 @@ public class AESAlgorithm {
 
     /**
      * Sets primaryKey, if key is the wrong size, throws KeyException
+     *
      * @param primaryKey
      */
     public void setPrimaryKey(byte[] primaryKey) {
@@ -90,7 +91,7 @@ public class AESAlgorithm {
             if (i < message.length) {
                 tmp[i] = message[i];
             } else {
-                tmp[i] = 0;
+                tmp[i] = 0;  //adding zeros if needed
             }
         }
 
@@ -114,7 +115,7 @@ public class AESAlgorithm {
      * @param in input to be encrypted
      * @return encrypted input
      */
-    public byte[] encrypt(byte[] in) {
+    public byte[] encrypt(byte[] in) { // Nk = 10, 12 or 14
         byte[] tmp = new byte[in.length];
         byte[][] state = new byte[Nb][Nb];
         for (int i = 0; i < in.length; i++) {
@@ -137,12 +138,14 @@ public class AESAlgorithm {
 
     /**
      * Decodes the given message
+     *
      * @param message
      * @return
      */
     public byte[] decode(byte[] message) {
         byte[] result = new byte[message.length];
         byte[] block = new byte[16];
+        //copying block of data and decrypting
         for (int i = 0; i < message.length; i += 16) {
             for (int j = 0; j < 16; j++) {
                 block[j] = message[i + j];
@@ -153,7 +156,7 @@ public class AESAlgorithm {
                 result[i + j] = block[j];
             }
         }
-        int toCut = 0; //if the original message was not a mutiple of 16 bytes, it has zeros at the end
+        int toCut = 0; //if the original message was not a multiple of 16 bytes, it has zeros at the end
         for (int i = result.length - 1; i >= 0; i--) {  // so we find them and delete them
             if (result[i] != 0) {
                 break;
@@ -171,10 +174,11 @@ public class AESAlgorithm {
 
     /**
      * Actual decryption process
+     *
      * @param in
      * @return
      */
-    public byte[] decrypt(byte[] in) {
+    public byte[] decrypt(byte[] in) {  // Nk = 10, 12 or 14
         byte[] tmp = new byte[in.length];
         byte[][] state = new byte[Nb][Nb];
         for (int i = 0; i < in.length; i++) {
@@ -198,12 +202,13 @@ public class AESAlgorithm {
 
     /**
      * Splits int value to four bytes
+     *
      * @param intValue
      * @return
      */
     private byte[] splitIntToFourBytes(int intValue) {
         byte[] result = new byte[Nb];
-        result[0] = (byte) ((intValue >> 24) & 0xFF);
+        result[0] = (byte) ((intValue >> 24) & 0xFF);  // extracts the least significant 8 bits (1 byte) of an integer value
         result[1] = (byte) ((intValue >> 16) & 0xFF);
         result[2] = (byte) ((intValue >> 8) & 0xFF);
         result[3] = (byte) (intValue & 0xFF);
@@ -212,6 +217,7 @@ public class AESAlgorithm {
 
     /**
      * Adds round key
+     *
      * @param state
      * @param expandedKey
      * @param round
@@ -221,19 +227,20 @@ public class AESAlgorithm {
         for (int i = 0; i < Nb; i++) {
             byte[] fourBytes = splitIntToFourBytes(expandedKey[start + i]);
             for (int j = 0; j < Nb; j++) {
-                state[i][j] ^= fourBytes[j];
+                state[i][j] ^= fourBytes[j]; //xor
             }
         }
     }
 
     /**
      * Substitutes the values in current state with the values in SBox
+     *
      * @param state
      */
     public void subBytes(byte[][] state) {
         byte[][] tmp = new byte[Nb][Nb];
         for (int row = 0; row < Nb; row++) {
-            for (int col = 0; col < Nb; col++) {
+            for (int col = 0; col < Nb; col++) {          // we have to treat byte as unsigned value (0, 255)
                 int intValue = (state[row][col] & 0xff);  // changes representation from (-128, 127) to (0, 255)
                 int col_sbox = intValue % 16;
                 int row_sbox = intValue / 16;
@@ -241,13 +248,13 @@ public class AESAlgorithm {
             }
         }
     }
-
     /**
      * Shifts rows in current state
      * First row remains unchanged
      * Second row is shifted by one position to the left
      * Third row is shifted by two positions to the left
      * Fourth row is shifted by three positions to the left
+     *
      * @param state
      */
     public void shiftRows(byte[][] state) {
@@ -279,6 +286,7 @@ public class AESAlgorithm {
 
     /**
      * Mixes columns in current state
+     *
      * @param state
      */
     public void mixColumns(byte[][] state) {
@@ -300,6 +308,7 @@ public class AESAlgorithm {
 
     /**
      * Performs mul operations
+     *
      * @param a
      * @param b
      * @return
@@ -332,6 +341,7 @@ public class AESAlgorithm {
 
     /**
      * Substitutes the values in current state with the values in InvertedSBox
+     *
      * @param state
      */
     public void invSubBytes(byte[][] state) {
@@ -352,6 +362,7 @@ public class AESAlgorithm {
      * Second row is shifted by three positions to the left
      * Third row is shifted by two positions to the left
      * Fourth row is shifted by one position to the left
+     *
      * @param state
      */
     public void invShiftRows(byte[][] state) {
@@ -382,6 +393,7 @@ public class AESAlgorithm {
 
     /**
      * Inverses mix columns operation
+     *
      * @param state
      */
     public void invMixColumns(byte[][] state) {  // autor - chat gpt xd
