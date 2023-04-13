@@ -78,9 +78,6 @@ public class AESAlgorithm {
         if (message.length % 16 != 0) {
             nrOfFullBlocks++;   // a partial block - adding 1 number to account for that
         }
-        if (nrOfFullBlocks == 0) {
-            nrOfFullBlocks++;   // nr of full blocks = 1
-        }
 
         int length = nrOfFullBlocks * 16;
         byte[] tmp = new byte[length];
@@ -89,9 +86,7 @@ public class AESAlgorithm {
         // copying message into tmp, adding bytes if needed
         for (int i = 0; i < length; i++) {
             if (i < message.length) {
-                tmp[i] = message[i];
-            } else {
-                tmp[i] = 0;  //adding zeros if needed
+                tmp[i] = message[i];  // copies valid message
             }
         }
 
