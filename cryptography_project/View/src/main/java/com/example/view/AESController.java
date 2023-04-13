@@ -122,7 +122,7 @@ public class AESController implements Initializable {
      */
     @FXML
     public void pressedReadKey() throws IOException {
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text files", "*.txt"));
+//        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text files", "*.txt"));
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
             String displayKey = new String(Files.readAllBytes(file.toPath()));
@@ -153,7 +153,7 @@ public class AESController implements Initializable {
         // Two keys, either user can paste theirs or save the generated one
         String userKey = saveKeyField.getText();
         String generatedKey = generateKeyField.getText();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text files", "*.txt"));
+//        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text files", "*.txt"));
         File file = fileChooser.showSaveDialog(null);
         if (file != null) {
             FileWriter writer = new FileWriter(file);
@@ -179,12 +179,12 @@ public class AESController implements Initializable {
      */
     @FXML
     public void pressedReadData() throws IOException {
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text files", "*.txt"));
+//        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text files", "*.txt"));
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
             message = Files.readAllBytes(file.toPath());
-            String displayMessage = new String(message);
-            toEncodeArea.setText(displayMessage);
+//            String displayMessage = new String(message);
+//            toEncodeArea.setText(displayMessage);
         } else {
             popUpWindow.showMessage("No file selected");
             throw new GuiException("No file selected");
@@ -201,16 +201,16 @@ public class AESController implements Initializable {
             popUpWindow.showMessage("Key is null");
             throw new GuiException("Key is null");
         }
-        message = toEncodeArea.getText().getBytes();
+//        message = toEncodeArea.getText().getBytes();
         try {
             message = algorithm.encode(message);
         } catch (MessageException e) {
             popUpWindow.showMessage("Message can't be empty");
             throw new GuiException(e);
         }
-        result = Base64.getEncoder().encode(message);
-        String displayMessage = new String(result);
-        encodedArea.setText(displayMessage);
+//        result = Base64.getEncoder().encode(message);
+//        String displayMessage = new String(result);
+//        encodedArea.setText(displayMessage);
     }
 
     /**
@@ -218,13 +218,16 @@ public class AESController implements Initializable {
      * @throws IOException
      */
     public void pressedSave() throws IOException {
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text files", "*.txt"));
+//        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text files", "*.txt"));
         File file = fileChooser.showSaveDialog(null);
         if (file != null) {
-            String stringResult = new String(result, StandardCharsets.US_ASCII);
-            FileWriter writer = new FileWriter(file);
-            writer.write(stringResult);
-            writer.close();
+//            String stringResult = new String(result, StandardCharsets.US_ASCII);
+            OutputStream outputStream = new FileOutputStream(file.getPath());
+//            FileWriter writer = new FileWriter(file);
+//            writer.write(stringResult);
+//            writer.close();
+            outputStream.write(message);
+            outputStream.close();
         } else {
             popUpWindow.showMessage("No file selected");
             throw new GuiException("No file selected");
@@ -240,12 +243,12 @@ public class AESController implements Initializable {
      */
     @FXML
     public void pressedReadCryptogram() throws IOException {
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text files", "*.txt"));
+//        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text files", "*.txt"));
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
             message = Files.readAllBytes(file.toPath());
-            String displayMessage = new String(message);
-            toDecodeArea.setText(displayMessage);
+//            String displayMessage = new String(message);
+//            toDecodeArea.setText(displayMessage);
         } else {
             popUpWindow.showMessage("No file selected");
             throw new GuiException("No file selected");
@@ -262,16 +265,16 @@ public class AESController implements Initializable {
             popUpWindow.showMessage("Key is null");
             throw new GuiException("Key is null");
         }
-        String messageString = toDecodeArea.getText();
-        if (messageString.length() == 0) {
-            popUpWindow.showMessage("Message can't be empty");
-            throw new GuiException("Message can't be empty");
-        }
-        message = messageString.getBytes();
-        result = Base64.getDecoder().decode(message);
-        result = algorithm.decode(result);
-        String displayResult = new String(result);
-        decodedArea.setText(displayResult);
+//        String messageString = toDecodeArea.getText();
+//        if (messageString.length() == 0) {
+//            popUpWindow.showMessage("Message can't be empty");
+//            throw new GuiException("Message can't be empty");
+//        }
+//        message = messageString.getBytes();
+//        result = Base64.getDecoder().decode(message);
+        message = algorithm.decode(message);
+//        String displayResult = new String(result);
+//        decodedArea.setText(displayResult);
     }
 
 
