@@ -87,13 +87,13 @@ public class DSAAlgorithm {
     public void generateSignature() throws NoSuchAlgorithmException {
         SecureRandom random = new SecureRandom();
         String message = "testowa wiadomość na razie stringiem";
-        BigInteger hash = new BigInteger(1, hashMessage());
+        //BigInteger hash = new BigInteger(1, hashMessage()); // trzeba pomyśleć jak to poprzekazywać
         int intq = this.q.intValue();
         do {
             this.k = new BigInteger(intq, random);
         } while (this.k.compareTo(BigInteger.ZERO) <= 0 || this.k.compareTo(this.q) >= 0); // 0 < k < q
         this.r = this.g.modPow(this.k, this.p).mod(this.q);
-        this.s = this.k.modInverse(q).multiply(hash.add(x.multiply(r)).mod(q)); // s = (k^-1 * (hash(message) + x * r)) mod q
+        //this.s = this.k.modInverse(q).multiply(hash.add(x.multiply(r)).mod(q)); // s = (k^-1 * (hash(message) + x * r)) mod q
     }
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
