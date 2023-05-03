@@ -2,24 +2,224 @@
 
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="backgroundColor" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.view.DSAController">
+<AnchorPane prefHeight="600.0" prefWidth="581.0" styleClass="backgroundColor" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.view.DSAController">
     <children>
-        <Label layoutX="72.0" layoutY="171.0" text="coming soon, stay tuned">
-            <font>
-                <Font name="Consolas" size="36.0" />
-            </font>
-        </Label>
-        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="51.0" layoutY="41.0" mnemonicParsing="false" onAction="#pressedBack" prefHeight="35.0" prefWidth="105.0" text="BACK">
-            <font>
-                <Font name="Consolas" size="15.0" />
-            </font>
-            <cursor>
-                <Cursor fx:constant="HAND" />
-            </cursor>
-        </Button>
+        <Pane fx:id="keyPane" layoutX="21.0" layoutY="20.0" prefHeight="326.0" prefWidth="540.0">
+            <children>
+                <Label alignment="CENTER" contentDisplay="CENTER" layoutX="204.0" layoutY="7.0" prefHeight="35.0" prefWidth="132.0" text="KEYS">
+                    <font>
+                        <Font name="Consolas" size="21.0" />
+                    </font>
+                </Label>
+                <ButtonBar layoutX="-2.0" layoutY="273.0" prefHeight="35.0" prefWidth="243.0">
+                    <buttons>
+                        <Label alignment="CENTER" maxWidth="148.0" prefHeight="18.0" text="Read keys from file" textAlignment="CENTER">
+                            <font>
+                                <Font name="Consolas" size="12.0" />
+                            </font>
+                        </Label>
+                        <Button maxWidth="10.0" mnemonicParsing="false" onAction="#pressedReadKeys" prefHeight="26.0" text="Read">
+                            <font>
+                                <Font name="Consolas" size="12.0" />
+                            </font>
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
+                        </Button>
+                    </buttons>
+                </ButtonBar>
+                <ButtonBar layoutX="289.0" layoutY="273.0" prefHeight="35.0" prefWidth="223.0">
+                    <buttons>
+                        <Label alignment="CENTER" maxWidth="148.0" prefHeight="18.0" text="Save keys to file" textAlignment="CENTER">
+                            <font>
+                                <Font name="Consolas" size="12.0" />
+                            </font>
+                        </Label>
+                        <Button maxWidth="10.0" mnemonicParsing="false" onAction="#pressedSaveKeys" prefHeight="26.0" text="Save">
+                            <font>
+                                <Font name="Consolas" size="12.0" />
+                            </font>
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
+                        </Button>
+                    </buttons>
+                </ButtonBar>
+                <ChoiceBox fx:id="keyChoice" layoutX="311.0" layoutY="42.0" prefHeight="25.0" prefWidth="105.0" />
+                <Label layoutX="124.0" layoutY="47.0" text="Choose L and N in bits(?)">
+                    <font>
+                        <Font name="Consolas" size="12.0" />
+                    </font>
+                </Label>
+                <Button alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="7.0" mnemonicParsing="false" onAction="#pressedBack" prefHeight="35.0" prefWidth="105.0" text="BACK">
+                    <font>
+                        <Font name="Consolas" size="15.0" />
+                    </font>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+            <ButtonBar layoutX="43.0" layoutY="75.0" prefHeight="35.0" prefWidth="411.0">
+               <buttons>
+                  <Label alignment="CENTER" maxWidth="148.0" prefHeight="18.0" text="q and g" textAlignment="CENTER">
+                     <font>
+                        <Font name="Consolas" size="12.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="qAndgField" prefHeight="25.0" prefWidth="253.0">
+                     <cursor>
+                        <Cursor fx:constant="TEXT" />
+                     </cursor>
+                  </TextField>
+               </buttons>
+            </ButtonBar>
+            <ButtonBar layoutX="43.0" layoutY="110.0" prefHeight="35.0" prefWidth="411.0">
+               <buttons>
+                  <Label alignment="CENTER" maxWidth="148.0" prefHeight="18.0" text="Public key" textAlignment="CENTER">
+                     <font>
+                        <Font name="Consolas" size="12.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="publicKeyField" prefHeight="25.0" prefWidth="253.0">
+                     <cursor>
+                        <Cursor fx:constant="TEXT" />
+                     </cursor>
+                  </TextField>
+               </buttons>
+            </ButtonBar>
+            <ButtonBar layoutX="43.0" layoutY="145.0" prefHeight="35.0" prefWidth="411.0">
+               <buttons>
+                  <Label alignment="CENTER" maxWidth="148.0" prefHeight="18.0" text="Private key" textAlignment="CENTER">
+                     <font>
+                        <Font name="Consolas" size="12.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="privateKeyField" prefHeight="25.0" prefWidth="253.0">
+                     <cursor>
+                        <Cursor fx:constant="TEXT" />
+                     </cursor>
+                  </TextField>
+               </buttons>
+            </ButtonBar>
+            <ButtonBar layoutX="43.0" layoutY="180.0" prefHeight="35.0" prefWidth="411.0">
+               <buttons>
+                  <Label alignment="CENTER" maxWidth="148.0" prefHeight="18.0" text="MOD p" textAlignment="CENTER">
+                     <font>
+                        <Font name="Consolas" size="12.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="modpField" prefHeight="25.0" prefWidth="253.0">
+                     <cursor>
+                        <Cursor fx:constant="TEXT" />
+                     </cursor>
+                  </TextField>
+               </buttons>
+            </ButtonBar>
+            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="218.0" layoutY="228.0" mnemonicParsing="false" onAction="#pressedGenerateKeys" prefHeight="35.0" prefWidth="105.0" text="Generate">
+               <font>
+                  <Font name="Consolas" size="15.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            </children>
+        </Pane>
+        <TabPane layoutX="21.0" layoutY="362.0" prefHeight="214.0" prefWidth="540.0" stylesheets="@style.css" tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+                <Tab closable="false" text="Sign">
+                    <content>
+                        <AnchorPane fx:id="encodePane" minHeight="0.0" minWidth="0.0" prefHeight="209.0" prefWidth="540.0">
+                            <children>
+                                <ButtonBar layoutX="34.0" layoutY="8.0" prefHeight="48.0" prefWidth="442.0">
+                                    <buttons>
+                                        <Label maxWidth="200.0" prefHeight="18.0" prefWidth="283.0" text="Choose file to sign">
+                                            <font>
+                                                <Font name="Consolas" size="16.0" />
+                                            </font>
+                                        </Label>
+                                        <Button fx:id="readToSignButton" alignment="CENTER" contentDisplay="CENTER" maxWidth="170.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="88.0" text="Choose file">
+                                            <font>
+                                                <Font name="Consolas" size="14.0" />
+                                            </font>
+                                            <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                            </cursor>
+                                        </Button>
+                                    </buttons>
+                                </ButtonBar>
+                                <Button alignment="CENTER" contentDisplay="CENTER" layoutX="201.0" layoutY="67.0" maxWidth="180.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="139.0" text="Sign using DSA">
+                                    <font>
+                                        <Font name="Consolas" size="14.0" />
+                                    </font>
+                                    <cursor>
+                                        <Cursor fx:constant="HAND" />
+                                    </cursor>
+                                </Button>
+                                <Button fx:id="saveSignedButton" alignment="CENTER" contentDisplay="CENTER" layoutX="187.0" layoutY="118.0" maxWidth="180.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="168.0" text="Save signed file">
+                                    <font>
+                                        <Font name="Consolas" size="14.0" />
+                                    </font>
+                                    <cursor>
+                                        <Cursor fx:constant="HAND" />
+                                    </cursor>
+                                </Button>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="Verify">
+                    <content>
+                        <AnchorPane fx:id="decodePane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <ButtonBar layoutX="35.0" layoutY="8.0" prefHeight="48.0" prefWidth="441.0">
+                                    <buttons>
+                                        <Label maxWidth="200.0" prefHeight="18.0" prefWidth="321.0" text="Choose file to verify">
+                                            <font>
+                                                <Font name="Consolas" size="16.0" />
+                                            </font>
+                                        </Label>
+                                        <Button fx:id="readToVerifyButton" alignment="CENTER" contentDisplay="CENTER" maxWidth="170.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="214.0" text="Choose file">
+                                            <font>
+                                                <Font name="Consolas" size="14.0" />
+                                            </font>
+                                            <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                            </cursor>
+                                        </Button>
+                                    </buttons>
+                                </ButtonBar>
+                                <Button alignment="CENTER" contentDisplay="CENTER" layoutX="200.0" layoutY="66.0" maxWidth="180.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="146.0" text="Verify using DSA">
+                                    <font>
+                                        <Font name="Consolas" size="14.0" />
+                                    </font>
+                                    <cursor>
+                                        <Cursor fx:constant="HAND" />
+                                    </cursor>
+                                </Button>
+                                <Button fx:id="saveVerifiedButton" alignment="CENTER" contentDisplay="CENTER" layoutX="188.0" layoutY="117.0" maxWidth="180.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="168.0" text="Save verified file">
+                                    <font>
+                                        <Font name="Consolas" size="14.0" />
+                                    </font>
+                                    <cursor>
+                                        <Cursor fx:constant="HAND" />
+                                    </cursor>
+                                </Button>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
     </children>
 </AnchorPane>
