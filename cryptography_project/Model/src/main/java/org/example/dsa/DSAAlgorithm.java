@@ -59,7 +59,7 @@ public class DSAAlgorithm {
         this.y = this.g.modPow(this.x, this.p);
     }
 
-    public byte[] hashMessage(byte[] text) throws NoSuchAlgorithmException {
+    private byte[] hashMessage(byte[] text) throws NoSuchAlgorithmException {
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
         byte[] hash = messageDigest.digest(text);
 

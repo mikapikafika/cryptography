@@ -5,13 +5,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import org.example.dsa.DSAAlgorithm;
 import org.example.exceptions.GuiException;
-import org.example.exceptions.KeyException;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -22,7 +19,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class DSAController implements Initializable {
+public class DSAController  {
 
     // Keys
     @FXML
@@ -43,12 +40,19 @@ public class DSAController implements Initializable {
     private Button readToVerifyButton;
     @FXML
     private Button saveVerifiedButton;
+    @FXML
+    private Button signUsingDsa;
+
+    @FXML
+    private Button verifySignatureButton;
+
 
     // Variables
     private int L = 512;
     private int N = 160;
     private FileChooser fileChooser = new FileChooser();
     private byte[] message;
+    private BigInteger[] signatureBigInt = new BigInteger[2];
     private PopUpWindow popUpWindow = new PopUpWindow();
     private DSAAlgorithm algorithm = new DSAAlgorithm();
 
@@ -56,31 +60,30 @@ public class DSAController implements Initializable {
     public void pressedBack() {
         StageSetup.buildStage("main-stage.fxml");
     }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        EventHandler<ActionEvent> saveHandler = actionEvent -> {
-            try {
-                pressedSave();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        };
-
-        saveSignedButton.setOnAction(saveHandler);
-        saveVerifiedButton.setOnAction(saveHandler);
-
-        EventHandler<ActionEvent> readHandler = actionEvent -> {
-            try {
-                pressedRead();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        };
-
-        readToSignButton.setOnAction(readHandler);
-        readToVerifyButton.setOnAction(readHandler);
-    }
+//
+//    @Override
+//    public void initialize(URL url, ResourceBundle resourceBundle) {
+//        EventHandler<ActionEvent> saveHandler = actionEvent -> {
+//            try {
+//                pressedSave();
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//        };
+//
+//        saveSignedButton.setOnAction(saveHandler);
+//
+//        EventHandler<ActionEvent> readHandler = actionEvent -> {
+//            try {
+//                pressedRead();
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//        };
+//
+//        readToSignButton.setOnAction(readHandler);
+//        readToVerifyButton.setOnAction(readHandler);
+//    }
 
 
     /**
@@ -136,8 +139,6 @@ public class DSAController implements Initializable {
         if (file != null) {
             FileWriter fileWriter = new FileWriter(file);
             BufferedWriter writer = new BufferedWriter(fileWriter);
-
-
             writer.write(qAndgField.getText());
             writer.newLine();
             writer.write(publicKeyField.getText());
@@ -177,18 +178,56 @@ public class DSAController implements Initializable {
      *
      * @throws IOException if there's no file
      */
+    @FXML
     public void pressedSave() throws IOException {
         File file = fileChooser.showSaveDialog(null);
         if (file != null) {
-            OutputStream outputStream = new FileOutputStream(file.getPath());
-            outputStream.write(message);
-            outputStream.close();
+            FileWriter fileWriter = new FileWriter(file.getPath());
+            fileWriter.write(byteToHex(signatureBigInt[0].toByteArray()));
+            fileWriter.write("\n");
+            fileWriter.write(byteToHex(signatureBigInt[1].toByteArray()));
+            fileWriter.close();
             popUpWindow.showInfo("File saved successfully :)");
         } else {
             popUpWindow.showError("No file selected");
             throw new GuiException("No file selected");
         }
     }
+
+    @FXML
+    public void pressedSign() throws NoSuchAlgorithmException {
+        // TODO dodac jakies wyskakujace okienka
+        signatureBigInt = algorithm.generateSignature(this.message);
+        popUpWindow.showInfo("File signed:)");
+    }
+
+    @FXML
+    public void pressedReadToVerify() throws IOException {
+
+        File file = fileChooser.showOpenDialog(null);
+        if (file != null) {
+            List<String> listOfStrings = Files.readAllLines(file.toPath());
+            signatureBigInt[0] = new BigInteger(hexToBytes(listOfStrings.get(0)));
+            signatureBigInt[1] = new BigInteger(hexToBytes(listOfStrings.get(1)));
+
+        } else {
+            popUpWindow.showError("No file selected");
+            throw new GuiException("No file selected");
+        }
+    }
+
+    // w ogole zeby zobaczyc czy jest gites podpis to trzeba przekazac tez ten oryginalny tekst
+    // wiec w message[] musi byc ta wiadomosc
+    @FXML
+    public void pressedVerify() throws NoSuchAlgorithmException {
+        // TODO dodac jakies zabezpieczenia
+        if (algorithm.verifySignature(this.message, this.signatureBigInt)) {
+            popUpWindow.showInfo("The signature matches :)");
+        } else {
+            popUpWindow.showError("The signature does not match");
+        }
+    }
+
 
     private byte[] hexToBytes(String string) {
         int length = string.length();
@@ -199,6 +238,7 @@ public class DSAController implements Initializable {
         }
         return bytes;
     }
+
     private String byteToHex(byte[] bytes) {
         StringBuilder hex = new StringBuilder(bytes.length * 2);
         for (byte b : bytes) {
@@ -207,3 +247,6 @@ public class DSAController implements Initializable {
         return hex.toString();
     }
 }
+// TODO ogolna rozkimna, nie ogarniam jak dziala do konca to podpisywanie nie powinnoo
+// byc tak ze ma sie dostep tylko do klucza publicznego i tym sie sprawdza ten podpis czy cos??
+// bo teraz to dziwnie dziala bo wszystko sie zapisuje na raz
