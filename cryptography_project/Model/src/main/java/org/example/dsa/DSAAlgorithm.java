@@ -26,9 +26,6 @@ public class DSAAlgorithm {
 
     private BigInteger p, q, g, h, x, y, k, r, s, w, u1, u2, v;
 
-    private PublicKey publicKey; // XDD
-    private PrivateKey privateKey;
-
     private final int L = 512;
     private final int N = 160;
 
@@ -60,27 +57,12 @@ public class DSAAlgorithm {
             this.x = new BigInteger(N - 2, random);
         } while (this.x.compareTo(BigInteger.ZERO) <= 0 || this.x.compareTo(this.q) >= 0); // 0 < x < q
         this.y = this.g.modPow(this.x, this.p);
-        DSAPublicKeySpec dsaPublicKeySpec = new DSAPublicKeySpec(y, p, q, g);
-        DSAPrivateKeySpec dsaPrivateKeySpec = new DSAPrivateKeySpec(x, p, q, g);
-
-        // albo KeyPairGenerator? czy coś?
-        KeyFactory keyFactory = KeyFactory.getInstance("DSA");
-        PublicKey publicKey = keyFactory.generatePublic(dsaPublicKeySpec);
-        PrivateKey privateKey = keyFactory.generatePrivate(dsaPrivateKeySpec);
     }
 
     public byte[] hashMessage(byte[] text) throws NoSuchAlgorithmException {
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
         byte[] hash = messageDigest.digest(text);
 
-        // zamiana na hex bo uwielbiamy hex
-        StringBuilder hexString = new StringBuilder();
-        for (byte b : hash) {
-            String hex = Integer.toHexString(0xff & b);
-            if (hex.length() == 1) hexString.append('0');
-            hexString.append(hex);
-        }
-        String hashValue = hexString.toString();
         return hash;
     }
 
@@ -118,6 +100,47 @@ public class DSAAlgorithm {
         } catch (InvalidKeySpecException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public BigInteger getP() {
+        return p;
+    }
+
+    public BigInteger getQ() {
+        return q;
+    }
+
+
+    public BigInteger getG() {
+        return g;
+    }
+
+    public BigInteger getX() {
+        return x;
+    }
+
+    public BigInteger getY() {
+        return y;
+    }
+
+    public void setP(BigInteger p) {
+        this.p = p;
+    }
+
+    public void setQ(BigInteger q) {
+        this.q = q;
+    }
+
+    public void setG(BigInteger g) {
+        this.g = g;
+    }
+
+    public void setX(BigInteger x) {
+        this.x = x;
+    }
+
+    public void setY(BigInteger y) {
+        this.y = y;
     }
 }
 

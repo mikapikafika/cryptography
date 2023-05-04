@@ -14,18 +14,17 @@ import org.example.exceptions.GuiException;
 import org.example.exceptions.KeyException;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.net.URL;
 import java.nio.file.Files;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class DSAController implements Initializable {
 
     // Keys
-    @FXML
-    private ChoiceBox<String> keyChoice;
-    private String[] keyOptions = {"(1024, 160)", "(2048, 224)", "(2048, 256)", "(3072, 256)"};
     @FXML
     private TextField qAndgField;
     @FXML
@@ -46,8 +45,8 @@ public class DSAController implements Initializable {
     private Button saveVerifiedButton;
 
     // Variables
-    private int L = 0;
-    private int N = 0;
+    private int L = 512;
+    private int N = 160;
     private FileChooser fileChooser = new FileChooser();
     private byte[] message;
     private PopUpWindow popUpWindow = new PopUpWindow();
@@ -60,9 +59,6 @@ public class DSAController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        keyChoice.getItems().addAll(keyOptions);
-        keyChoice.setOnAction(this::getKeyParameters);
-
         EventHandler<ActionEvent> saveHandler = actionEvent -> {
             try {
                 pressedSave();
@@ -86,62 +82,44 @@ public class DSAController implements Initializable {
         readToVerifyButton.setOnAction(readHandler);
     }
 
-    private void getKeyParameters(ActionEvent actionEvent) {
-        switch (keyChoice.getValue()) {
-            case "(1024, 160)" -> {
-                this.L = 1024;
-                this.N = 160;
-            }
-            case "(2048, 224)" -> {
-                this.L = 2048;
-                this.N = 224;
-            }
-            case "(2048, 256)" -> {
-                this.L = 2048;
-                this.N = 256;
-            }
-            case "(3072, 256)" -> {
-                this.L = 3072;
-                this.N = 256;
-            }
-        }
-    }
 
     /**
      * Generates keys depending on the given L and N values and displays them in proper text fields.
+     *
      * @throws GuiException if key length is not specified (is zero)
      */
     @FXML
     public void pressedGenerateKeys() throws GuiException, NoSuchAlgorithmException, InvalidKeySpecException {
-        if (this.L == 0 || this.N == 0) {
-            popUpWindow.showError("L and N values haven't been selected");
-            throw new GuiException("L and N values haven't been selected");
-        }
 
+        //TODO czemu q zawsze zaczyna sie od 00 xd ???
         algorithm.generateKey();
-
-        qAndgField.setText("");
-        publicKeyField.setText("");
-        privateKeyField.setText("");
-        modpField.setText("");
+        qAndgField.setText(byteToHex(algorithm.getQ().toByteArray()) + " " + byteToHex(algorithm.getG().toByteArray()));
+        publicKeyField.setText(byteToHex(algorithm.getY().toByteArray()));
+        privateKeyField.setText(byteToHex(algorithm.getX().toByteArray()));
+        modpField.setText(byteToHex(algorithm.getP().toByteArray()));
     }
 
     /**
      * Reads keys in hex from file and displays them in proper text fields.
+     *
      * @throws IOException if there's no file
      */
     @FXML
     public void pressedReadKeys() throws IOException {
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
-
-
-            qAndgField.setText("");
-            publicKeyField.setText("");
-            privateKeyField.setText("");
-            modpField.setText("");
-        }
-        else {
+            List<String> listOfStrings = Files.readAllLines(file.toPath());
+            qAndgField.setText(listOfStrings.get(0));
+            publicKeyField.setText(listOfStrings.get(1));
+            privateKeyField.setText(listOfStrings.get(2));
+            modpField.setText(listOfStrings.get(3));
+            String[] qAndg = listOfStrings.get(0).split(" ");
+            algorithm.setQ(new BigInteger(hexToBytes(qAndg[0])));
+            algorithm.setG(new BigInteger(hexToBytes(qAndg[1])));
+            algorithm.setY(new BigInteger(hexToBytes(listOfStrings.get(1))));
+            algorithm.setX(new BigInteger(hexToBytes(listOfStrings.get(2))));
+            algorithm.setP(new BigInteger(hexToBytes(listOfStrings.get(3))));
+        } else {
             popUpWindow.showError("No file selected");
             throw new GuiException("No file selected");
         }
@@ -149,6 +127,7 @@ public class DSAController implements Initializable {
 
     /**
      * Saves generated or read keys in hex to a file
+     *
      * @throws IOException if there's no file
      */
     @FXML
@@ -168,8 +147,7 @@ public class DSAController implements Initializable {
             writer.write(modpField.getText());
             writer.newLine();
             writer.close();
-        }
-        else {
+        } else {
             popUpWindow.showError("No file selected");
             throw new GuiException("No file selected");
         }
@@ -177,9 +155,9 @@ public class DSAController implements Initializable {
     }
 
 
-
     /**
      * Reads chosen file
+     *
      * @throws IOException if there's no file
      */
     @FXML
@@ -196,6 +174,7 @@ public class DSAController implements Initializable {
 
     /**
      * Saves chosen file
+     *
      * @throws IOException if there's no file
      */
     public void pressedSave() throws IOException {
@@ -209,5 +188,22 @@ public class DSAController implements Initializable {
             popUpWindow.showError("No file selected");
             throw new GuiException("No file selected");
         }
+    }
+
+    private byte[] hexToBytes(String string) {
+        int length = string.length();
+        byte[] bytes = new byte[length / 2];
+        for (int i = 0; i < length; i += 2) {
+            bytes[i / 2] = (byte) ((Character.digit(string.charAt(i), 16) << 4)
+                    + Character.digit(string.charAt(i + 1), 16));
+        }
+        return bytes;
+    }
+    private String byteToHex(byte[] bytes) {
+        StringBuilder hex = new StringBuilder(bytes.length * 2);
+        for (byte b : bytes) {
+            hex.append(String.format("%02X", b)); // convert byte to two-digit hexadecimal representation
+        }
+        return hex.toString();
     }
 }

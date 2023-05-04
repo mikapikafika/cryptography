@@ -1,8 +1,8 @@
 package com.example.view;
 
 
-import org.example.AESAlgorithm;
-import org.example.KeyHandler;
+import org.example.aes.AESAlgorithm;
+import org.example.aes.KeyHandler;
 import org.example.exceptions.MessageException;
 import org.example.exceptions.KeyException;
 import org.example.exceptions.GuiException;

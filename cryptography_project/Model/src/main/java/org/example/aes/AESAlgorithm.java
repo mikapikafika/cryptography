@@ -1,4 +1,4 @@
-package org.example;
+package org.example.aes;
 
 
 import org.example.exceptions.MessageException;
