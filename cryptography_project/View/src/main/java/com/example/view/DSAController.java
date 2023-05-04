@@ -118,7 +118,7 @@ public class DSAController implements Initializable {
             throw new GuiException("L and N values haven't been selected");
         }
 
-        algorithm.generateKey(this.L, this.N);
+        algorithm.generateKey();
 
         qAndgField.setText("");
         publicKeyField.setText("");

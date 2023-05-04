@@ -110,7 +110,7 @@ public class AESAlgorithm {
      * @param in input to be encrypted
      * @return encrypted input
      */
-    public byte[] encrypt(byte[] in) { // Nk = 10, 12 or 14
+    public byte[] encrypt(byte[] in) { // Nr = 10, 12 or 14
         byte[] tmp = new byte[in.length];
         byte[][] state = new byte[Nb][Nb];
         for (int i = 0; i < in.length; i++) {
@@ -391,7 +391,7 @@ public class AESAlgorithm {
      *
      * @param state
      */
-    public void invMixColumns(byte[][] state) {  // autor - chat gpt xd
+    public void invMixColumns(byte[][] state) {
         for (int i = 0; i < Nb; i++) {
             byte c0 = state[0][i];
             byte c1 = state[1][i];
