@@ -108,20 +108,30 @@ public class DSAController  {
      * @throws IOException if there's no file
      */
     @FXML
-    public void pressedReadKeys() throws IOException {
+    public void pressedReadPublicKey() throws IOException {
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
             List<String> listOfStrings = Files.readAllLines(file.toPath());
             qAndgField.setText(listOfStrings.get(0));
             publicKeyField.setText(listOfStrings.get(1));
-            privateKeyField.setText(listOfStrings.get(2));
-            modpField.setText(listOfStrings.get(3));
+            modpField.setText(listOfStrings.get(2));
             String[] qAndg = listOfStrings.get(0).split(" ");
             algorithm.setQ(new BigInteger(hexToBytes(qAndg[0])));
             algorithm.setG(new BigInteger(hexToBytes(qAndg[1])));
             algorithm.setY(new BigInteger(hexToBytes(listOfStrings.get(1))));
-            algorithm.setX(new BigInteger(hexToBytes(listOfStrings.get(2))));
-            algorithm.setP(new BigInteger(hexToBytes(listOfStrings.get(3))));
+            algorithm.setP(new BigInteger(hexToBytes(listOfStrings.get(2))));
+        } else {
+            popUpWindow.showError("No file selected");
+            throw new GuiException("No file selected");
+        }
+    }
+    @FXML
+    public void pressedReadPrivateKey() throws IOException {
+        File file = fileChooser.showOpenDialog(null);
+        if (file != null) {
+            List<String> listOfStrings = Files.readAllLines(file.toPath());
+            privateKeyField.setText(listOfStrings.get(0));
+            algorithm.setX(new BigInteger(hexToBytes(listOfStrings.get(0))));
         } else {
             popUpWindow.showError("No file selected");
             throw new GuiException("No file selected");
@@ -134,7 +144,7 @@ public class DSAController  {
      * @throws IOException if there's no file
      */
     @FXML
-    public void pressedSaveKeys() throws IOException {
+    public void pressedSavePublicKey() throws IOException {
         File file = fileChooser.showSaveDialog(null);
         if (file != null) {
             FileWriter fileWriter = new FileWriter(file);
@@ -143,10 +153,21 @@ public class DSAController  {
             writer.newLine();
             writer.write(publicKeyField.getText());
             writer.newLine();
-            writer.write(privateKeyField.getText());
-            writer.newLine();
             writer.write(modpField.getText());
-            writer.newLine();
+            writer.close();
+        } else {
+            popUpWindow.showError("No file selected");
+            throw new GuiException("No file selected");
+        }
+
+    }
+    @FXML
+    public void pressedSavePrivateKey() throws IOException {
+        File file = fileChooser.showSaveDialog(null);
+        if (file != null) {
+            FileWriter fileWriter = new FileWriter(file);
+            BufferedWriter writer = new BufferedWriter(fileWriter);
+            writer.write(privateKeyField.getText());
             writer.close();
         } else {
             popUpWindow.showError("No file selected");
