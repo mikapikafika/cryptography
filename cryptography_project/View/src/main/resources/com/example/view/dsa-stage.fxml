@@ -71,7 +71,10 @@
             </ButtonBar>
             <ButtonBar layoutX="56.0" layoutY="235.0" prefHeight="35.0" prefWidth="420.0">
                <buttons>
-                  <Button maxWidth="40.0" mnemonicParsing="false" onAction="#pressedReadPrivateKey" prefHeight="26.0" text="Read" />
+                  <Button maxWidth="40.0" mnemonicParsing="false" onAction="#pressedReadPrivateKey" prefHeight="26.0" text="Read">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
                   <TextField fx:id="privateKeyField" prefHeight="26.0" prefWidth="250.0">
                      <cursor>
                         <Cursor fx:constant="TEXT" />
@@ -178,6 +181,9 @@
                                  <font>
                                     <Font name="Consolas" size="14.0" />
                                  </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </Button>
                            </buttons></ButtonBar>
                                 <Button fx:id="verifySignatureButton" alignment="CENTER" contentDisplay="CENTER" layoutX="197.0" layoutY="149.0" maxWidth="180.0" mnemonicParsing="false" onAction="#pressedVerify" prefHeight="42.0" prefWidth="146.0" text="Verify using DSA">
