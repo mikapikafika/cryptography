@@ -1,4 +1,4 @@
-package org.example;
+package org.example.aes;
 
 import javax.crypto.*;
 import java.security.*;
