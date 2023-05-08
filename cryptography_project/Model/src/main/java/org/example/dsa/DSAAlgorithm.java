@@ -11,19 +11,6 @@ import java.util.Random;
 public class DSAAlgorithm {
 
 
-    // generowanie klucza
-
-    //generuje sie od razu 4 klucze ? q oraz g klucz publiczny y prywatny x MOD p
-
-    // podpisywanie byte array - pliki etc
-    // podipsywanie tekstu ?? tak ma rogowski
-    // odpowiednio deszyfrowanie tego i tego
-
-
-    // trzebaz BIG inigera korzystac
-    // czy trzeba robić skrót wiadomosci (hash) >???? i dopiero go szyfrowac
-
-
     private BigInteger p, q, g, h, x, y, k, r, s, w, u1, u2, v;
 
     private final int L = 512;
@@ -32,9 +19,7 @@ public class DSAAlgorithm {
     public void generateKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
         // keySize = L
         // L podzielne przez 64
-        // szczerze nie losowałabym tylko dawała gotowe pary ale to jak chcesz, te są bezpieczniejsze, standard od 500 do 1000 jest przestarzały (pozdrawiam wykłady)
-        // pary L i N:
-        //  (1024, 160), (2048, 224), (2048, 256), or (3072, 256)
+
         SecureRandom random = new SecureRandom();
 
         this.q = BigInteger.probablePrime(N, random);
@@ -89,18 +74,6 @@ public class DSAAlgorithm {
         return v.compareTo(signature[0]) == 0;
     }
 
-    public static void main(String[] args) throws NoSuchAlgorithmException {
-        DSAAlgorithm dsa = new DSAAlgorithm();
-        try {
-            dsa.generateKey();
-            String string = "wlazl kotek na plotek";
-            BigInteger[] signature = dsa.generateSignature(string.getBytes());
-            String stringFalse = "dsdsdsd";
-            System.out.println(dsa.verifySignature(stringFalse.getBytes(), signature));
-        } catch (InvalidKeySpecException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public BigInteger getP() {
         return p;

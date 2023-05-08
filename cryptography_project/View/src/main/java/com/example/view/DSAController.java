@@ -60,30 +60,7 @@ public class DSAController  {
     public void pressedBack() {
         StageSetup.buildStage("main-stage.fxml");
     }
-//
-//    @Override
-//    public void initialize(URL url, ResourceBundle resourceBundle) {
-//        EventHandler<ActionEvent> saveHandler = actionEvent -> {
-//            try {
-//                pressedSave();
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//        };
-//
-//        saveSignedButton.setOnAction(saveHandler);
-//
-//        EventHandler<ActionEvent> readHandler = actionEvent -> {
-//            try {
-//                pressedRead();
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//        };
-//
-//        readToSignButton.setOnAction(readHandler);
-//        readToVerifyButton.setOnAction(readHandler);
-//    }
+
 
 
     /**
@@ -237,8 +214,6 @@ public class DSAController  {
         }
     }
 
-    // w ogole zeby zobaczyc czy jest gites podpis to trzeba przekazac tez ten oryginalny tekst
-    // wiec w message[] musi byc ta wiadomosc
     @FXML
     public void pressedVerify() throws NoSuchAlgorithmException {
         // TODO dodac jakies zabezpieczenia
@@ -268,6 +243,4 @@ public class DSAController  {
         return hex.toString();
     }
 }
-// TODO ogolna rozkimna, nie ogarniam jak dziala do konca to podpisywanie nie powinnoo
-// byc tak ze ma sie dostep tylko do klucza publicznego i tym sie sprawdza ten podpis czy cos??
-// bo teraz to dziwnie dziala bo wszystko sie zapisuje na raz
+
