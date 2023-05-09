@@ -218,8 +218,11 @@ public class DSAController  {
      * @throws NoSuchAlgorithmException
      */
     @FXML
-    public void pressedVerify() throws NoSuchAlgorithmException {
-        // TODO dodac jakies zabezpieczenia
+    public void pressedVerify() throws NoSuchAlgorithmException, GuiException {
+        if (message == null || signatureBigInt.length == 0 || publicKeyField == null) {
+            popUpWindow.showError("message is null or signature is null");
+            throw new GuiException("message is null or signature is null");
+        }
         if (algorithm.verifySignature(this.message, this.signatureBigInt)) {
             popUpWindow.showInfo("The signature matches :)");
         } else {
