@@ -1,79 +1,108 @@
 package org.example.dsa;
 
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.security.*;
-import java.security.spec.DSAPrivateKeySpec;
-import java.security.spec.DSAPublicKeySpec;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Random;
 
 public class DSAAlgorithm {
 
+    private BigInteger p, q, g, h, x, y, k, r, s, u1, u2, v;
+    private final int L = 512;      // L-bit prime p, key length
+    private final int N = 160;      // N-bit prime q
 
-    private BigInteger p, q, g, h, x, y, k, r, s, w, u1, u2, v;
 
-    private final int L = 512;
-    private final int N = 160;
-
-    public void generateKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
-        // keySize = L
-        // L podzielne przez 64
-
+    /**
+     * Generates all the essential key parameters
+     */
+    public void generateKey() {
         SecureRandom random = new SecureRandom();
 
+        // q & p
+        // ProbablePrime returns a positive BigInteger
+        // that is probably prime, with the specified bitLength
+        // (in this case, N)
         this.q = BigInteger.probablePrime(N, random);
-        BigInteger pom1, pom2;       // jak rogowski na razie zrobione
+        BigInteger pTemp, pMinusOne;
         do {
-            pom1 = BigInteger.probablePrime(L, random);
-            pom2 = pom1.subtract(BigInteger.ONE);
-            pom1 = pom1.subtract(pom2.remainder(q));
-        } while (!pom1.isProbablePrime(2)); // dk czy to potrzebne czy p-1 bedzie multiple of q zawsze
-        this.p = pom1;
-        // & tak żeby p-1 było wielokrotnością q
+            pTemp = BigInteger.probablePrime(L, random);
+            pMinusOne = pTemp.subtract(BigInteger.ONE);           // pom1 - 1
+            pTemp = pTemp.subtract(pMinusOne.remainder(q));       // pom1 - 1 is divisible by q
+        } while (!pTemp.isProbablePrime(2));              // until pom1 is probablePrime with certainty level 2 (high level)
+        this.p = pTemp;
 
-
+        // h & g
+        pMinusOne = p.subtract(BigInteger.ONE);
         do {
-            this.h = new BigInteger(L - 2, random); // -2 robi rogowski ja nie zagłębiałam się na razie dlaczego
-            this.g = this.h.modPow(p.subtract(BigInteger.ONE).divide(this.q), this.p);  // g to h do potęgi (p-1)/q
-        } while (this.g.compareTo(BigInteger.ONE) == 0);  // g nie może być 1
+            this.h = new BigInteger(L - 2, random);
+            this.g = h.modPow(pMinusOne.divide(q), p);             // g = h^((p - 1)/q)
+        } while (g.compareTo(BigInteger.ONE) == 0);                // g != 1
 
+        // x & y
         do {
             this.x = new BigInteger(N - 2, random);
-        } while (this.x.compareTo(BigInteger.ZERO) <= 0 || this.x.compareTo(this.q) >= 0); // 0 < x < q
-        this.y = this.g.modPow(this.x, this.p);
+        } while (x.compareTo(BigInteger.ZERO) <= 0 || x.compareTo(q) >= 0);  // 0 < x < q
+        this.y = g.modPow(x, p);                                   // y = g^x mod p
     }
 
+
+    /**
+     * Hashes the message
+     * @param text text to hash
+     * @return hashed text in bytes
+     * @throws NoSuchAlgorithmException
+     */
     private byte[] hashMessage(byte[] text) throws NoSuchAlgorithmException {
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-        byte[] hash = messageDigest.digest(text);
-
-        return hash;
+        return messageDigest.digest(text);
     }
 
+
+    /**
+     * Generates the signature
+     * @param text text to sign
+     * @return signature
+     * @throws NoSuchAlgorithmException
+     */
     public BigInteger[] generateSignature(byte[] text) throws NoSuchAlgorithmException {
         SecureRandom random = new SecureRandom();
-
+        // generates a BigInteger from the hash value of the text message
+        // 1 = BigInteger should be positive
         BigInteger hash = new BigInteger(1, hashMessage(text));
+
+        // k
         do {
             this.k = new BigInteger(N - 2, random);
-        } while (this.k.compareTo(BigInteger.ZERO) <= 0 || this.k.compareTo(this.q) >= 0); // 0 < k < q
+        } while (k.compareTo(BigInteger.ZERO) <= 0 || k.compareTo(q) >= 0);     // 0 < k < q
+
+        // signature = (r, s)
         BigInteger[] signature = new BigInteger[2];
-        this.r = this.g.modPow(this.k, this.p).mod(this.q);
-        this.s = this.k.modInverse(q).multiply(hash.add(x.multiply(r)).mod(q)); // s = (k^-1 * (hash(message) + x * r)) mod q
+        this.r = g.modPow(k, p).mod(q);                                            // r = (g^k mod p) mod q
+        this.s = k.modInverse(q).multiply(hash.add(x.multiply(r)).mod(q));         // s = (k^-1 * (hash(message) + x * r)) mod q
         signature[0] = this.r;
         signature[1] = this.s;
         return signature;
     }
 
+
+    /**
+     * Verifies the signature
+     * @param text signed text to verify
+     * @param signature signature to verify
+     * @return either true or false
+     * @throws NoSuchAlgorithmException
+     */
     public boolean verifySignature(byte[] text, BigInteger[] signature) throws NoSuchAlgorithmException {
         BigInteger hash = new BigInteger(1, hashMessage(text));
-        u1 = hash.multiply(signature[1].modInverse(q)).mod(q);
-        u2 = signature[0].multiply(signature[1].modInverse(q)).mod(q);
-        v = g.modPow(u1, p).multiply(y.modPow(u2, p)).mod(p).mod(q);
-        return v.compareTo(signature[0]) == 0;
+
+        BigInteger w = signature[1].modInverse(q);                          // w = s^-1 mod q
+        u1 = hash.multiply(w).mod(q);                                       // u1 = hash(message) * w mod q
+        u2 = signature[0].multiply(w).mod(q);                               // u2 = r * w mod q
+        v = g.modPow(u1, p).multiply(y.modPow(u2, p)).mod(p).mod(q);        // v = (g^u1 * y^u2 mod p) mod q
+        return v.compareTo(signature[0]) == 0;                              // valid only if v = r
     }
 
+
+    // Getters & setters used in the Controller class
 
     public BigInteger getP() {
         return p;
@@ -82,7 +111,6 @@ public class DSAAlgorithm {
     public BigInteger getQ() {
         return q;
     }
-
 
     public BigInteger getG() {
         return g;

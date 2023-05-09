@@ -1,23 +1,17 @@
 package com.example.view;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import org.example.dsa.DSAAlgorithm;
 import org.example.exceptions.GuiException;
-
 import java.io.*;
 import java.math.BigInteger;
-import java.net.URL;
 import java.nio.file.Files;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class DSAController  {
 
@@ -31,30 +25,14 @@ public class DSAController  {
     @FXML
     private TextField modpField;
 
-    // Signing / verifying
-    @FXML
-    private Button readToSignButton;
-    @FXML
-    private Button saveSignedButton;
-    @FXML
-    private Button readToVerifyButton;
-    @FXML
-    private Button saveVerifiedButton;
-    @FXML
-    private Button signUsingDsa;
-
-    @FXML
-    private Button verifySignatureButton;
-
 
     // Variables
-    private int L = 512;
-    private int N = 160;
     private FileChooser fileChooser = new FileChooser();
     private byte[] message;
     private BigInteger[] signatureBigInt = new BigInteger[2];
     private PopUpWindow popUpWindow = new PopUpWindow();
     private DSAAlgorithm algorithm = new DSAAlgorithm();
+
 
     @FXML
     public void pressedBack() {
@@ -62,15 +40,13 @@ public class DSAController  {
     }
 
 
+    // KEYS
 
     /**
      * Generates keys depending on the given L and N values and displays them in proper text fields.
-     *
-     * @throws GuiException if key length is not specified (is zero)
      */
     @FXML
-    public void pressedGenerateKeys() throws GuiException, NoSuchAlgorithmException, InvalidKeySpecException {
-
+    public void pressedGenerateKeys() {
         //TODO czemu q zawsze zaczyna sie od 00 xd ???
         algorithm.generateKey();
         qAndgField.setText(byteToHex(algorithm.getQ().toByteArray()) + " " + byteToHex(algorithm.getG().toByteArray()));
@@ -79,9 +55,10 @@ public class DSAController  {
         modpField.setText(byteToHex(algorithm.getP().toByteArray()));
     }
 
+
     /**
-     * Reads keys in hex from file and displays them in proper text fields.
-     *
+     * Reads public key values in hex from file and displays them in proper text fields
+     * Then sets these values in actual variables
      * @throws IOException if there's no file
      */
     @FXML
@@ -93,6 +70,7 @@ public class DSAController  {
             publicKeyField.setText(listOfStrings.get(1));
             modpField.setText(listOfStrings.get(2));
             String[] qAndg = listOfStrings.get(0).split(" ");
+
             algorithm.setQ(new BigInteger(hexToBytes(qAndg[0])));
             algorithm.setG(new BigInteger(hexToBytes(qAndg[1])));
             algorithm.setY(new BigInteger(hexToBytes(listOfStrings.get(1))));
@@ -102,12 +80,20 @@ public class DSAController  {
             throw new GuiException("No file selected");
         }
     }
+
+
+    /**
+     * Reads private key values in hex from file and displays them in proper text fields
+     * Then sets these values in actual variables
+     * @throws IOException if there's no file
+     */
     @FXML
     public void pressedReadPrivateKey() throws IOException {
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
             List<String> listOfStrings = Files.readAllLines(file.toPath());
             privateKeyField.setText(listOfStrings.get(0));
+
             algorithm.setX(new BigInteger(hexToBytes(listOfStrings.get(0))));
         } else {
             popUpWindow.showError("No file selected");
@@ -115,9 +101,9 @@ public class DSAController  {
         }
     }
 
+
     /**
-     * Saves generated or read keys in hex to a file
-     *
+     * Saves generated or read public key values in hex to a file
      * @throws IOException if there's no file
      */
     @FXML
@@ -138,6 +124,12 @@ public class DSAController  {
         }
 
     }
+
+
+    /**
+     * Saves generated or read private key values in hex to a file
+     * @throws IOException if there's no file
+     */
     @FXML
     public void pressedSavePrivateKey() throws IOException {
         File file = fileChooser.showSaveDialog(null);
@@ -150,13 +142,13 @@ public class DSAController  {
             popUpWindow.showError("No file selected");
             throw new GuiException("No file selected");
         }
-
     }
 
 
+    // SIGNING / VERIFYING
+
     /**
      * Reads chosen file
-     *
      * @throws IOException if there's no file
      */
     @FXML
@@ -171,9 +163,9 @@ public class DSAController  {
         }
     }
 
+
     /**
      * Saves chosen file
-     *
      * @throws IOException if there's no file
      */
     @FXML
@@ -192,13 +184,20 @@ public class DSAController  {
         }
     }
 
+    /**
+     * Signs the file
+     * @throws NoSuchAlgorithmException
+     */
     @FXML
     public void pressedSign() throws NoSuchAlgorithmException {
-        // TODO dodac jakies wyskakujace okienka
         signatureBigInt = algorithm.generateSignature(this.message);
-        popUpWindow.showInfo("File signed:)");
+        popUpWindow.showInfo("File signed :)");
     }
 
+    /**
+     * Reads the file to verify
+     * @throws IOException if there's no file
+     */
     @FXML
     public void pressedReadToVerify() throws IOException {
 
@@ -207,23 +206,29 @@ public class DSAController  {
             List<String> listOfStrings = Files.readAllLines(file.toPath());
             signatureBigInt[0] = new BigInteger(hexToBytes(listOfStrings.get(0)));
             signatureBigInt[1] = new BigInteger(hexToBytes(listOfStrings.get(1)));
-
+            popUpWindow.showInfo("File read successfully :)");
         } else {
             popUpWindow.showError("No file selected");
             throw new GuiException("No file selected");
         }
     }
 
+    /**
+     * Actually verifies the signature
+     * @throws NoSuchAlgorithmException
+     */
     @FXML
     public void pressedVerify() throws NoSuchAlgorithmException {
         // TODO dodac jakies zabezpieczenia
         if (algorithm.verifySignature(this.message, this.signatureBigInt)) {
             popUpWindow.showInfo("The signature matches :)");
         } else {
-            popUpWindow.showError("The signature does not match");
+            popUpWindow.showError("The signature does not match :(");
         }
     }
 
+
+    // HELPER METHODS
 
     private byte[] hexToBytes(String string) {
         int length = string.length();

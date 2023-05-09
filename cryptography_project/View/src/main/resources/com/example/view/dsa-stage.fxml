@@ -136,7 +136,7 @@
                                                 <Font name="Consolas" size="16.0" />
                                             </font>
                                         </Label>
-                                        <Button fx:id="readToSignButton" alignment="CENTER" contentDisplay="CENTER" maxWidth="170.0" mnemonicParsing="false" onAction="#pressedRead" prefHeight="35.0" prefWidth="88.0" text="Choose file">
+                                        <Button alignment="CENTER" contentDisplay="CENTER" maxWidth="170.0" mnemonicParsing="false" onAction="#pressedRead" prefHeight="35.0" prefWidth="88.0" text="Choose file">
                                             <font>
                                                 <Font name="Consolas" size="14.0" />
                                             </font>
@@ -146,7 +146,7 @@
                                         </Button>
                                     </buttons>
                                 </ButtonBar>
-                                <Button fx:id="signUsingDsa" alignment="CENTER" contentDisplay="CENTER" layoutX="202.0" layoutY="83.0" maxWidth="180.0" mnemonicParsing="false" onAction="#pressedSign" prefHeight="35.0" prefWidth="139.0" text="Sign using DSA">
+                                <Button alignment="CENTER" contentDisplay="CENTER" layoutX="202.0" layoutY="83.0" maxWidth="180.0" mnemonicParsing="false" onAction="#pressedSign" prefHeight="35.0" prefWidth="139.0" text="Sign using DSA">
                                     <font>
                                         <Font name="Consolas" size="14.0" />
                                     </font>
@@ -154,7 +154,7 @@
                                         <Cursor fx:constant="HAND" />
                                     </cursor>
                                 </Button>
-                                <Button fx:id="saveSignedButton" alignment="CENTER" contentDisplay="CENTER" layoutX="187.0" layoutY="149.0" maxWidth="180.0" mnemonicParsing="false" onAction="#pressedSave" prefHeight="42.0" prefWidth="168.0" text="Save signed file">
+                                <Button alignment="CENTER" contentDisplay="CENTER" layoutX="201.0" layoutY="149.0" maxWidth="180.0" mnemonicParsing="false" onAction="#pressedSave" prefHeight="42.0" prefWidth="138.0" text="Save signature">
                                     <font>
                                         <Font name="Consolas" size="14.0" />
                                     </font>
@@ -177,7 +177,7 @@
                                     <Font name="Consolas" size="16.0" />
                                  </font>
                               </Label>
-                              <Button maxWidth="150.0" mnemonicParsing="false" onAction="#pressedRead" prefHeight="35.0" prefWidth="194.0" text="Choose file">
+                              <Button alignment="CENTER" contentDisplay="CENTER" maxWidth="150.0" mnemonicParsing="false" onAction="#pressedRead" prefHeight="35.0" prefWidth="194.0" text="Choose file">
                                  <font>
                                     <Font name="Consolas" size="14.0" />
                                  </font>
@@ -186,7 +186,7 @@
                                  </cursor>
                               </Button>
                            </buttons></ButtonBar>
-                                <Button fx:id="verifySignatureButton" alignment="CENTER" contentDisplay="CENTER" layoutX="197.0" layoutY="149.0" maxWidth="180.0" mnemonicParsing="false" onAction="#pressedVerify" prefHeight="42.0" prefWidth="146.0" text="Verify using DSA">
+                                <Button alignment="CENTER" contentDisplay="CENTER" layoutX="197.0" layoutY="149.0" maxWidth="180.0" mnemonicParsing="false" onAction="#pressedVerify" prefHeight="42.0" prefWidth="146.0" text="Verify using DSA">
                                     <font>
                                         <Font name="Consolas" size="14.0" />
                                     </font>
@@ -201,7 +201,7 @@
                                     <Font name="Consolas" size="16.0" />
                                  </font>
                               </Label>
-                              <Button fx:id="readToVerifyButton" alignment="CENTER" contentDisplay="CENTER" maxWidth="170.0" mnemonicParsing="false" onAction="#pressedReadToVerify" prefHeight="35.0" prefWidth="88.0" text="Choose signature">
+                              <Button alignment="CENTER" contentDisplay="CENTER" maxWidth="170.0" mnemonicParsing="false" onAction="#pressedReadToVerify" prefHeight="35.0" prefWidth="88.0" text="Choose signature">
                                  <font>
                                     <Font name="Consolas" size="14.0" />
                                  </font>
