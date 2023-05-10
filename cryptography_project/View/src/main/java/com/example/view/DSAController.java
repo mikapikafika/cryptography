@@ -11,6 +11,7 @@ import java.math.BigInteger;
 import java.nio.file.Files;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
 import java.util.List;
 
 public class DSAController  {
@@ -47,12 +48,11 @@ public class DSAController  {
      */
     @FXML
     public void pressedGenerateKeys() {
-        //TODO czemu q zawsze zaczyna sie od 00 xd ???
         algorithm.generateKey();
-        qAndgField.setText(byteToHex(algorithm.getQ().toByteArray()) + " " + byteToHex(algorithm.getG().toByteArray()));
-        publicKeyField.setText(byteToHex(algorithm.getY().toByteArray()));
-        privateKeyField.setText(byteToHex(algorithm.getX().toByteArray()));
-        modpField.setText(byteToHex(algorithm.getP().toByteArray()));
+        qAndgField.setText(algorithm.getQ().toString(16).toUpperCase() + " " + algorithm.getG().toString(16).toUpperCase());
+        publicKeyField.setText(algorithm.getY().toString(16).toUpperCase());
+        privateKeyField.setText(algorithm.getX().toString(16).toUpperCase());
+        modpField.setText(algorithm.getP().toString(16).toUpperCase());
     }
 
 
@@ -173,9 +173,9 @@ public class DSAController  {
         File file = fileChooser.showSaveDialog(null);
         if (file != null) {
             FileWriter fileWriter = new FileWriter(file.getPath());
-            fileWriter.write(byteToHex(signatureBigInt[0].toByteArray()));
+            fileWriter.write(signatureBigInt[0].toString(16).toUpperCase());
             fileWriter.write("\n");
-            fileWriter.write(byteToHex(signatureBigInt[1].toByteArray()));
+            fileWriter.write(signatureBigInt[1].toString(16).toUpperCase());
             fileWriter.close();
             popUpWindow.showInfo("File saved successfully :)");
         } else {
@@ -243,12 +243,21 @@ public class DSAController  {
         return bytes;
     }
 
-    private String byteToHex(byte[] bytes) {
-        StringBuilder hex = new StringBuilder(bytes.length * 2);
-        for (byte b : bytes) {
-            hex.append(String.format("%02X", b)); // convert byte to two-digit hexadecimal representation
-        }
-        return hex.toString();
-    }
+//    private String byteToHex(byte[] bytes) {
+//        StringBuilder hex = new StringBuilder(bytes.length * 2);
+//        for (byte b : bytes) {
+//            hex.append(String.format("%02X", b)); // convert byte to two-digit hexadecimal representation
+//        }
+//        return hex.toString();
+//    }
+//private String byteToHex(byte[] bytes) {
+//    StringBuilder hex = new StringBuilder(bytes.length * 2);
+//    for (byte b : bytes) {
+//        if (b != 0) {
+//            hex.append(String.format("%02X", b)); // convert byte to two-digit hexadecimal representation
+//        }
+//    }
+//    return hex.toString();
+//}
 }
 
