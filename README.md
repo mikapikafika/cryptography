@@ -1,6 +1,6 @@
 <h1 align="center" id="title">Cryptography Project</h1>
 
-<p id="description">The goal of this project was to implement the AES encryption algorithm and DSA (Digital Signature Algorithm) in an application with a user-friendly graphical interface.</p>
+<p id="description">The goal of this Java-based project was to implement the AES encryption algorithm and DSA (Digital Signature Algorithm) in an application with a user-friendly graphical interface. Made for the Foundations of Cryptography course at TUL.</p>
 
   
   
@@ -8,35 +8,38 @@
 
 Here're some of the project's best features:
 
-*   generating or loading a cipher key from file
-*   encoding a file using the AES algorithm
-*   decoding a file
-*   signing a file with DSA and verifying the signature
+*   Generating, reading from and saving cryptographic keys to file
+*   Encoding a file using the AES algorithm. It supports key lengths of 128, 192, and 256 bits
+*   Decoding a file
+*   Signing a file with DSA and verifying the signature
 
-<h2>🛠️ Installation Steps:</h2>
+<h2>💻 Built with</h2>
 
-<p>1. Ensure you have Java installed (this project uses Java 17).</p>
+Technologies used in the project:
 
-<p>2. To build the project you can use the provided Maven wrapper scripts:</p>
-<p>On Unix-based systems:</p>
+* Java
+* JavaFX
+* Maven
 
-```
-./mvnw clean install mvnw.cmd clean install
-```
-<p>On Windows:</p>
+<h2>🧑‍💻 Code structure</h2> 
 
-```
-mvnw.cmd clean install
-```
+The project is divided into two main modules:
 
-<p>3. To run the program navigate to the View module directory in your terminal and type:</p>
-<p>On Unix-based systems:</p>
+* Model: contains the implementation of the AES and DSA algorithms
+* View: is responsible for the user interface of the application
 
-```
-./mvnw clean javafx:run  // mvnw.cmd clean javafx:run
-```
-<p>On Windows:</p>
+<h2>🛠️ Installation steps:</h2>
+
+Make sure you have all the dependencies needed installed (Java 17 & JavaFX).
+
+<p>To build and run this project, use the following command in the terminal:</p>
 
 ```
-mvnw.cmd clean javafx:run
+mvnw clean install 
+```
+
+<p>3. To run the GUI part of the project, type:</p>
+
+```
+mvnw clean javafx:run
 ```
