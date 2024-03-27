@@ -1,4 +1,4 @@
-<h1 align="center" id="title">Cryptography Project</h1>
+<h1 align="center" id="title">AES Encryptor with DSA</h1>
 
 <p id="description">The goal of this Java-based project was to implement the AES encryption algorithm and DSA (Digital Signature Algorithm) in an application with a user-friendly graphical interface. Made for the Foundations of Cryptography course at TUL.</p>
 
