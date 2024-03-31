@@ -38,7 +38,7 @@ Make sure you have all the dependencies needed installed (Java 17 & JavaFX).
 mvnw clean install 
 ```
 
-<p>3. To run the GUI part of the project, type:</p>
+<p>To run the GUI part of the project, type:</p>
 
 ```
 mvnw clean javafx:run
